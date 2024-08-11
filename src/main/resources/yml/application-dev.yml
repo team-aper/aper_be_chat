@@ -2,7 +2,7 @@ spring:
   config:
     import:
       - classpath:/yml/application-secret.yml
-    active:
+    activate:
       on-profile: dev
 
 

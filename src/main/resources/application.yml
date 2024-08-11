@@ -6,5 +6,5 @@ spring:
     import:
       - classpath:/yml/application-local.yml
       - classpath:/yml/application-dev.yml
-    profiles:
-      active: local
+  profiles:
+    active: local
