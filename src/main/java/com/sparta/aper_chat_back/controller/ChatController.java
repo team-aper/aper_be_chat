@@ -3,6 +3,10 @@ package com.sparta.aper_chat_back.controller;
 import com.sparta.aper_chat_back.dto.MessageRequestDto;
 import com.sparta.aper_chat_back.entity.ChatMessage;
 import com.sparta.aper_chat_back.service.ChatService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -22,6 +26,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8081")
+@Tag(name = "APIs for Chat", description = "load history chats, send chats to subscribers")
 public class ChatController {
 
     private final ChatService chatService;
@@ -33,6 +38,7 @@ public class ChatController {
     }
 
     @GetMapping("/history")
+    @Operation(summary = "과거 채팅 불러오기", description = "chatRoomId에 해당하는 채팅방 기록을 불러옴")
     public Flux<ChatMessage> getChatHistory(@RequestParam Long chatRoomId) {
         return chatService.getChatHistory(chatRoomId);
     }
