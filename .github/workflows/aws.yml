@@ -108,6 +108,11 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.ECR_URI }}:latest
 
+    - name: Create application-secret.yml from secret
+      run: |
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > application-secret.yml
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
+
     - name: Run Docker container on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
