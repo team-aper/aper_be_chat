@@ -5,3 +5,5 @@ spring:
     active:
       on-profile: local
 
+mongodb:
+  uri: ${local.mongodb.uri}

@@ -18,3 +18,6 @@ springdoc:
 
   paths-to-match:
     - ${dev.swagger.match}
+
+mongodb:
+  uri: ${dev.mongodb.uri}
