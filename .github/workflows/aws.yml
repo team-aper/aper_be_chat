@@ -37,10 +37,10 @@ jobs:
       run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
     - name: Build Docker image
-      run: docker build -t repository .
+      run: docker build -t chat-repository .
 
     - name: Tag Docker image
-      run: docker tag repository:latest ${{ secrets.ECR_URI }}:latest
+      run: docker tag chat-repository:latest ${{ secrets.ECR_URI }}:latest
 
     - name: Delete latest image from ECR
       uses: appleboy/ssh-action@v0.1.6
@@ -49,7 +49,7 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          aws ecr batch-delete-image --repository-name repository --image-ids imageTag=latest
+          aws ecr batch-delete-image --repository-name chat-repository --image-ids imageTag=latest
 
     - name: Push Docker image to ECR
       run: docker push ${{ secrets.ECR_URI }}:latest
