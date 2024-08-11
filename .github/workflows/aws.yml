@@ -22,13 +22,13 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew build
-      
     - name: Create application-secret.yml from secret
       run: |
-        echo "${{ secrets.APPLICATION_SECRET_YML }}" > application-secret.yml
+        mkdir -p ./src/main/resources/yml
         echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
+
+    - name: Build with Gradle
+      run: ./gradlew build
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
