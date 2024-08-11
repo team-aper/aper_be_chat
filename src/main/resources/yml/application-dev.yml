@@ -4,3 +4,17 @@ spring:
       - classpath:/yml/application-secret.yml
     active:
       on-profile: dev
+
+
+springdoc:
+  swagger-ui:
+    path: ${dev.swagger.path}
+
+  api-docs:
+    path: ${dev.swagger.api-docs}
+
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+  paths-to-match:
+    - ${dev.swagger.match}
