@@ -14,10 +14,12 @@ public class ChatMessage {
 
     @Id
     private ObjectId id;
-    private final Long senderId;
-    private final Long chatRoomId;
-    private final String content;
-    private final LocalDateTime timestamp;
+    private Long senderId;
+    private Long chatRoomId;
+    private String content;
+    private LocalDateTime timestamp;
+
+    public ChatMessage() {}
 
     public ChatMessage(MessageRequestDto requestDto) {
         this.senderId = requestDto.getSenderId();
