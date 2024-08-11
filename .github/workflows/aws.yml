@@ -21,10 +21,14 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
-      
 
     - name: Build with Gradle
       run: ./gradlew build
+      
+    - name: Create application-secret.yml from secret
+      run: |
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > application-secret.yml
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -107,11 +111,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker pull ${{ secrets.ECR_URI }}:latest
-
-    - name: Create application-secret.yml from secret
-      run: |
-        echo "${{ secrets.APPLICATION_SECRET_YML }}" > application-secret.yml
-        echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
 
     - name: Run Docker container on EC2
       uses: appleboy/ssh-action@v0.1.6
