@@ -18,5 +18,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/aper-chat").setAllowedOrigins("*");
+        // have to change allowed origins
     }
 }
