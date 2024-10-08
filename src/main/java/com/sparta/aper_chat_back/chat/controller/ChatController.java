@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = {"http://localhost:8081", "http://localhost:8080"})
 @Tag(name = "APIs for Chat", description = "load history chats, send chats to subscribers")
 public class ChatController {
 
