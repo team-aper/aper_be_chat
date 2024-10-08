@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.controller;
+package com.sparta.aper_chat_back.chat.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

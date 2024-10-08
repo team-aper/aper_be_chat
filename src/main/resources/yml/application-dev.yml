@@ -21,3 +21,10 @@ springdoc:
 
 mongodb:
   uri: ${dev.mongodb.uri}
+
+
+
+secret:
+  key:
+    access: ${jwt.secret.key.access}
+    refresh: ${jwt.secret.key.refresh}

@@ -1,18 +1,13 @@
-package com.sparta.aper_chat_back.controller;
+package com.sparta.aper_chat_back.chat.controller;
 
-import com.sparta.aper_chat_back.dto.MessageRequestDto;
-import com.sparta.aper_chat_back.entity.ChatMessage;
+import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
+import com.sparta.aper_chat_back.chat.entity.ChatMessage;
 import com.sparta.aper_chat_back.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-
-import java.time.Duration;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8081")

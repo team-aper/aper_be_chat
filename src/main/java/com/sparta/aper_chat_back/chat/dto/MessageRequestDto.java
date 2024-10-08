@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.dto;
+package com.sparta.aper_chat_back.chat.dto;
 
 import lombok.Getter;
 

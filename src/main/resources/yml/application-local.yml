@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 spring:
   config:
     import:
@@ -5,5 +8,22 @@ spring:
     activate:
       on-profile: local
 
+  datasource:
+    url: ${local.mysql.url}
+    username: ${local.mysql.username}
+    password: ${local.mysql.password}
+    driver-class-name: ${local.mysql.driver-class-name}
+
 mongodb:
   uri: ${local.mongodb.uri}
+
+spring.jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: true
+
+
+secret:
+  key:
+    access: ${jwt.secret.key.access}
+    refresh: ${jwt.secret.key.refresh}

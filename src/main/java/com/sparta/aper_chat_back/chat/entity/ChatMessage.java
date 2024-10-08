@@ -1,6 +1,6 @@
-package com.sparta.aper_chat_back.entity;
+package com.sparta.aper_chat_back.chat.entity;
 
-import com.sparta.aper_chat_back.dto.MessageRequestDto;
+import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;

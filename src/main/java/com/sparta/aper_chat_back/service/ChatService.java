@@ -1,15 +1,13 @@
 package com.sparta.aper_chat_back.service;
 
-import com.sparta.aper_chat_back.dto.MessageRequestDto;
-import com.sparta.aper_chat_back.entity.ChatMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
+import com.sparta.aper_chat_back.chat.entity.ChatMessage;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
 
 @Service
 public class ChatService {
