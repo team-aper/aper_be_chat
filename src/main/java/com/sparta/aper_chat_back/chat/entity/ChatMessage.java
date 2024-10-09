@@ -17,6 +17,7 @@ public class ChatMessage {
     private Long senderId;
     private Long chatRoomId;
     private String content;
+    private Boolean read;
     private LocalDateTime timestamp;
 
     public ChatMessage() {}
@@ -26,5 +27,6 @@ public class ChatMessage {
         this.chatRoomId = requestDto.getChatRoomId();
         this.content = requestDto.getContent();
         this.timestamp = LocalDateTime.now();
+        this.read = Boolean.FALSE;
     }
 }
