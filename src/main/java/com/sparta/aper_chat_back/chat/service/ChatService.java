@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.service;
+package com.sparta.aper_chat_back.chat.service;
 
 import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
 import com.sparta.aper_chat_back.chat.entity.ChatMessage;
