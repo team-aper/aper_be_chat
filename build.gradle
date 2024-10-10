@@ -50,6 +50,10 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //rabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 }
 
 tasks.named('test') {

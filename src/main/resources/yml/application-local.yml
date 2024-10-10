@@ -14,6 +14,12 @@ spring:
     password: ${local.mysql.password}
     driver-class-name: ${local.mysql.driver-class-name}
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${local.rabbitmq.username}
+    password: ${local.rabbitmq.password}
+
 mongodb:
   uri: ${local.mongodb.uri}
 
