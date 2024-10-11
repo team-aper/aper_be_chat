@@ -39,14 +39,16 @@ public class WebSecurityConfig {
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("http://localhost:8081"); //have to specify url later
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.addAllowedOriginPattern("*");
         configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(
                 List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/ws/**", configuration);
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
