@@ -11,13 +11,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/subscribe");
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/subscribe");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/aper-chat").setAllowedOrigins("*");
+        registry.addEndpoint("/ws/aper-chat")
+                .setAllowedOriginPatterns("http://localhost:8081");
         // have to change allowed origins
     }
 }
