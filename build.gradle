@@ -54,6 +54,13 @@ dependencies {
     //rabbitMQ
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+    //LocalDateTime
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.4'
+
+    //client - implementation
+    implementation group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
+    implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+
 }
 
 tasks.named('test') {
