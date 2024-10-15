@@ -61,6 +61,9 @@ dependencies {
     implementation group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
     implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
 
+    //reactor netty
+    implementation 'io.projectreactor.netty:reactor-netty:1.0.25'
+
 }
 
 tasks.named('test') {
