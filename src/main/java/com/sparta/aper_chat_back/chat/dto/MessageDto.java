@@ -1,5 +1,6 @@
 package com.sparta.aper_chat_back.chat.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class MessageDto {
+    private Long id;
     @JsonProperty("chatRoomId")
     private Long chatRoomId;
 
@@ -18,17 +20,26 @@ public class MessageDto {
     @JsonProperty("message")
     private String message;
 
-    @JsonProperty("regDate")
-    private String region;
+    @JsonProperty("content")
+    private String content;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime regDate;
 
 
-    public MessageDto(Long chatRoomId) {
+    @JsonCreator
+    public MessageDto(
+            @JsonProperty("chatRoomId") Long chatRoomId,
+            @JsonProperty("senderId") Long memberId,
+            @JsonProperty("message") String message,
+            @JsonProperty("regDate") LocalDateTime regDate) {
+        this.id = 1L;
         this.chatRoomId = chatRoomId;
-        this.regDate = LocalDateTime.now();
+        this.memberId = memberId;
+        this.message = message;
+        this.regDate = regDate;
     }
+
 
     public void setRegDate(LocalDateTime now) {
         this.regDate = LocalDateTime.now();
