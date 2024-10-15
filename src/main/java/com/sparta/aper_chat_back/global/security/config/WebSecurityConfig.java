@@ -40,7 +40,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("http://localhost:8081"); //have to specify url later
+        configuration.addAllowedOriginPattern("*"); //have to specify url later
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

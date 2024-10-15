@@ -27,13 +27,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setRelayHost("localhost")
                 .setRelayPort(61613)
                 .setSystemLogin(rabbitMqUsername)
-                .setSystemPasscode(rabbitMqPassword);
+                .setSystemPasscode(rabbitMqPassword)
+                .setClientLogin(rabbitMqUsername)
+                .setClientPasscode(rabbitMqPassword);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/aper-chat")
-                .setAllowedOriginPatterns("http://localhost:8081") // have to change allowed origins
+                .setAllowedOriginPatterns("*") // have to change allowed origins
                 .withSockJS();
     }
 }

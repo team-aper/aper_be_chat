@@ -64,6 +64,8 @@ dependencies {
     //reactor netty
     implementation 'io.projectreactor.netty:reactor-netty:1.0.25'
 
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+
 }
 
 tasks.named('test') {
