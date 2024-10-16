@@ -1,5 +1,6 @@
 package com.sparta.aper_chat_back.chat.service;
 
+import com.sparta.aper_chat_back.chat.dto.MessageDto;
 import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
 import com.sparta.aper_chat_back.chat.entity.ChatMessage;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -20,12 +21,11 @@ public class ChatService {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @Transactional
-    public Mono<ChatMessage> saveMessage(MessageRequestDto requestDto) {
-        String collectionName = "chat_" + requestDto.getChatRoomId();
-        ChatMessage chatMessage = new ChatMessage(requestDto);
-        return reactiveMongoTemplate.save(chatMessage, collectionName)
-                .thenReturn(chatMessage);
+
+    public Mono<ChatMessage> saveMessage(MessageDto messageDto) {
+        String collectionName = "chat_" + messageDto.getChatRoomId();
+        ChatMessage chatMessage = new ChatMessage(messageDto);
+        return reactiveMongoTemplate.save(chatMessage, collectionName);
     }
 
     @Transactional
@@ -35,11 +35,11 @@ public class ChatService {
     }
 
 
-    @Transactional
-    public Mono<ChatMessage> saveAndBroadcastMessage(MessageRequestDto requestDto) {
-        return saveMessage(requestDto)
-                .doOnSuccess(savedMessage -> {
-                    messagingTemplate.convertAndSend("/subscribe/" + requestDto.getChatRoomId(), savedMessage);
-                });
-    }
+//    @Transactional
+//    public Mono<ChatMessage> saveAndBroadcastMessage(MessageRequestDto requestDto) {
+//        return saveMessage(requestDto)
+//                .doOnSuccess(savedMessage -> {
+//                    messagingTemplate.convertAndSend("/subscribe/" + requestDto.getChatRoomId(), savedMessage);
+//                });
+//    }
 }

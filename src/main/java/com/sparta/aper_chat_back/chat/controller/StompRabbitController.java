@@ -1,6 +1,8 @@
 package com.sparta.aper_chat_back.chat.controller;
 
 import com.sparta.aper_chat_back.chat.dto.MessageDto;
+import com.sparta.aper_chat_back.chat.service.ChatService;
+import com.sparta.aper_chat_back.chat.service.MainChatService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -14,12 +16,14 @@ public class StompRabbitController {
 
     private final RabbitTemplate template;
 
-    private final static String CHAT_EXCHANGE_NAME = "chat.exchange";
+    private final static String CHAT_EXCHANGE_NAME = "chat.exchange"; // will be used when the other not joined
     private final static String CHAT_QUEUE_NAME = "chat.queue";
+    private final ChatService chatService;
 
 
-    public StompRabbitController(RabbitTemplate template) {
+    public StompRabbitController(RabbitTemplate template, ChatService chatService) {
         this.template = template;
+        this.chatService = chatService;
     }
 
     @MessageMapping("chat.enter.{chatRoomId}")
@@ -33,7 +37,11 @@ public class StompRabbitController {
     @MessageMapping("chat.message.{chatRoomId}")
     public void send(MessageDto chat, @DestinationVariable Long chatRoomId) {
         chat.setRegDate(LocalDateTime.now());
-        template.convertAndSend("amq.topic", "room." + chatRoomId, chat);
+        chatService.saveMessage(chat)
+                .doOnSuccess(savedMessage -> {
+                    template.convertAndSend("amq.topic", "room." + chatRoomId, chat);
+                })
+                .subscribe();
     }
 
     @RabbitListener(queues = CHAT_QUEUE_NAME)

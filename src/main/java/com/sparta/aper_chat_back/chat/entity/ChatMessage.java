@@ -1,5 +1,6 @@
 package com.sparta.aper_chat_back.chat.entity;
 
+import com.sparta.aper_chat_back.chat.dto.MessageDto;
 import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
 import lombok.Getter;
 import org.bson.types.ObjectId;
@@ -28,5 +29,13 @@ public class ChatMessage {
         this.content = requestDto.getContent();
         this.timestamp = LocalDateTime.now();
         this.read = Boolean.FALSE;
+    }
+
+    public ChatMessage(MessageDto messageDto) {
+        this.senderId = messageDto.getId();
+        this.chatRoomId = messageDto.getChatRoomId();
+        this.content = messageDto.getContent();
+        this.timestamp = messageDto.getRegDate();
+        this.read = Boolean.TRUE;
     }
 }
