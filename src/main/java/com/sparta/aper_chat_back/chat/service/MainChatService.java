@@ -36,8 +36,6 @@ public class MainChatService {
 
     @Transactional
     public ResponseDto<Void> createChat(Long userId, Long tutorId) {
-        // 결제 횟수가 남아있는지 확인하는 코드도 추가 되어야 함.
-
         ChatRoom chatRoom = new ChatRoom();
 
         User user = findByIdAndCheckPresent(userId, false);
@@ -46,7 +44,6 @@ public class MainChatService {
         ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
         ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
 
-        // tutor에게 알림 보내야 함.
 
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(userChatParticipant);

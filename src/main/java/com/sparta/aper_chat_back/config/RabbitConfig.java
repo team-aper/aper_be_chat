@@ -44,36 +44,36 @@ public class RabbitConfig {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
-    @Bean
-    public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-        rabbitTemplate.setRoutingKey(CHAT_QUEUE_NAME);
-        return rabbitTemplate;
-    }
+//    @Bean
+//    public RabbitTemplate rabbitTemplate() {
+//        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+//        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+//        rabbitTemplate.setRoutingKey(CHAT_QUEUE_NAME);
+//        return rabbitTemplate;
+//    }
 
-    @Bean
-    public SimpleMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer containers = new SimpleMessageListenerContainer();
-        containers.setConnectionFactory(connectionFactory());
-        containers.setQueueNames(CHAT_QUEUE_NAME);
-        containers.setMessageListener(listenerAdapter); //containers.setMessageListener(null); 이라고 설정했더니 에러가 남.
-        return containers;
-    }
+//    @Bean
+//    public SimpleMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
+//        SimpleMessageListenerContainer containers = new SimpleMessageListenerContainer();
+//        containers.setConnectionFactory(connectionFactory());
+//        containers.setQueueNames(CHAT_QUEUE_NAME);
+//        containers.setMessageListener(listenerAdapter); //containers.setMessageListener(null); 이라고 설정했더니 에러가 남.
+//        return containers;
+//    }
 
     @Bean
     public MessageListenerAdapter listenerAdapter(StompRabbitController stompRabbitController) {
         return new MessageListenerAdapter(stompRabbitController, "receive");
     }
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost("localhost");
-        factory.setUsername(rabbitMqUsername);
-        factory.setPassword(rabbitMqPassword);
-        return factory;
-    }
+//    @Bean
+//    public ConnectionFactory connectionFactory() {
+//        CachingConnectionFactory factory = new CachingConnectionFactory();
+//        factory.setHost("localhost");
+//        factory.setUsername(rabbitMqUsername);
+//        factory.setPassword(rabbitMqPassword);
+//        return factory;
+//    }
 
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {

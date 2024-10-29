@@ -47,19 +47,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
-    @Override
-    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-        messageConverters.add(jacksonMessageConverter());
-        return false;
-    }
-
-    @Bean
-    public MappingJackson2MessageConverter jacksonMessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        converter.setObjectMapper(objectMapper);
-        return converter;
-    }
+//    @Override
+//    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+//        messageConverters.add(jacksonMessageConverter());
+//        return false;
+//    }
+//
+//    @Bean
+//    public MappingJackson2MessageConverter jacksonMessageConverter() {
+//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule());
+//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+//        converter.setObjectMapper(objectMapper);
+//        return converter;
+//    }
 }
