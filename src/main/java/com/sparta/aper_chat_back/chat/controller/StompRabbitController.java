@@ -46,6 +46,6 @@ public class StompRabbitController {
 
     @RabbitListener(queues = CHAT_QUEUE_NAME)
     public void receive(MessageDto msg) {
-        System.out.println("received : " + msg.getMessage());
+        System.out.println("received : " + msg.getContent());
     }
 }

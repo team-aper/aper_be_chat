@@ -7,6 +7,7 @@ import com.sparta.aper_chat_back.chat.entity.ChatParticipant;
 import com.sparta.aper_chat_back.chat.entity.ChatRoom;
 import com.sparta.aper_chat_back.chat.entity.ChatRoomView;
 import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
+import com.sparta.aper_chat_back.chat.enums.UserEnum;
 import com.sparta.aper_chat_back.chat.repository.ChatParticipantRepository;
 import com.sparta.aper_chat_back.chat.repository.ChatRoomRepository;
 import com.sparta.aper_chat_back.chat.repository.ChatRoomViewRepository;
@@ -54,19 +55,22 @@ public class MainChatService {
         chatParticipantRepository.save(userChatParticipant);
         chatParticipantRepository.save(tutorChatParticipant);
 
-        return sendSystemMessage(chatRoom.getId(), message, userId, user.getPenName())
+        return sendRequestSystemMessage(chatRoom.getId(), message, userId, user.getPenName())
                 .thenReturn(ResponseDto.success(ChatMessageEnum.CREATE_CHAT_SUCCESS.getMessage()));
     }
 
-    private Mono<Void> sendSystemMessage(Long chatRoomId, String message, Long userId, String userPenName) {
+    private Mono<Void> sendRequestSystemMessage(Long chatRoomId, String message, Long userId, String userPenName) {
         MessageDto userRequestMessage = new MessageDto(chatRoomId, message, userId, 0L);
         Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
 
         String serviceMessage = String.format("1:1 수업 요청이 도착했어요. %s님과 1:1 수업을 진행할까요?", userPenName);
         MessageDto systemRequestMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 1L);
 
+        MessageDto requestedMessage = new MessageDto(chatRoomId, ChatMessageEnum.CHAT_REQUESTED.getMessage(), 0L, 2L);
+
         return userMessageMono
                 .then(chatService.saveMessage(systemRequestMessage))
+                .then(chatService.saveMessage(requestedMessage))
                 .then();
     }
 
@@ -106,25 +110,47 @@ public class MainChatService {
     }
 
     @Transactional
-    public ResponseDto<Void> rejectChatRoomRequest(Long roomId, Long tutorId) {
+    public Mono<ResponseDto<Void>> rejectChatRoomRequest(Long roomId, Long tutorId, String message) {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
-            return ResponseDto.fail(ChatMessageEnum.CHAT_REQUEST_MISSING.getMessage());
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_REQUEST_MISSING.getMessage()));
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (chatRoom.getIsAccepted()) {
-            return ResponseDto.fail(ChatMessageEnum.ALREADY_ACCEPTED.getMessage());
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_ACCEPTED.getMessage()));
         }
         if (chatRoom.getIsRejected()) {
-            return ResponseDto.fail(ChatMessageEnum.ALREADY_REJECTED.getMessage());
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_REJECTED.getMessage()));
         }
 
         chatRoom.reject();
         chatRoomRepository.save(chatRoom);
+        
+        return sendRejectSystemMessage(roomId, tutorId, message)
+                .then(Mono.just(ResponseDto.success(ChatMessageEnum.REQUEST_REJECTED.getMessage())));
 
-        return ResponseDto.success(ChatMessageEnum.REQUEST_REJECTED.getMessage());
+    }
+
+    private Mono<Void> sendRejectSystemMessage(Long chatRoomId, Long tutorId, String message) {
+        Optional<User> optionalTutor = userRepository.findById(tutorId);
+        if (optionalTutor.isEmpty()) {
+            return Mono.error(new RuntimeException(UserEnum.USER_NOT_FOUND.getMessage()));
+        }
+        User tutor = optionalTutor.get();
+
+        MessageDto userRequestMessage = new MessageDto(chatRoomId, message, tutorId, 0L);
+        Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
+
+        String serviceMessage = String.format("%s 님이 아래와 같은 사유로 수업을 거절했어요.", tutor.getPenName());
+        MessageDto systemRejectMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 3L); // 3 - 학생과 튜터 모두에게 보여주는 시스템 메시지.
+        MessageDto rejectReasonMessage = new MessageDto(chatRoomId, message, 0L, 4L); // 4 - 모두에게 보여주는 크기가 작은 글씨를 의미. + system 메시지 연속으로 나오면 연결되게 블록 만들도록 해야 함.
+
+        return userMessageMono
+                .then(chatService.saveMessage(systemRejectMessage))
+                .then(chatService.saveMessage(rejectReasonMessage))
+                .then();
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {

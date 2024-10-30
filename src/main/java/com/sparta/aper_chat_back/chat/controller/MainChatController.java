@@ -2,6 +2,8 @@ package com.sparta.aper_chat_back.chat.controller;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
+import com.sparta.aper_chat_back.chat.dto.RejectChatRequestDto;
+import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
 import com.sparta.aper_chat_back.chat.service.ChatService;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
 import com.sparta.aper_chat_back.global.docs.ChatControllerDocs;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8082")
 @RestController
 @RequestMapping("/chat")
 @RequiredArgsConstructor
@@ -23,18 +26,19 @@ public class MainChatController implements ChatControllerDocs {
 
     private final MainChatService mainChatService;
 
-    @PostMapping("/chat")
+    @PostMapping
     public Mono<ResponseDto<Void>> createChat(
             @RequestBody CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
+        //Long userId = 1L;
         Long tutorId = createChatRequestDto.getTutorId();
 
         // 비동기적으로 이미 생성된 채팅방인지 확인
         return mainChatService.isCreatedChat(userId, tutorId)
                 .flatMap(isCreated -> {
                     if (isCreated) {
-                        return Mono.just(ResponseDto.fail("이미 생성된 채팅방 입니다."));
+                        return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_CREATED.getMessage()));
                     }
                     // 채팅방 생성 요청
                     return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
@@ -47,10 +51,10 @@ public class MainChatController implements ChatControllerDocs {
         return mainChatService.getParticipatingChats(userDetails.user().getUserId());
     }
 
-    @DeleteMapping("/{roomId}")
-    public ResponseDto<Void> rejectChatRequest(
-            @PathVariable Long roomId,
+    @DeleteMapping("/status")
+    public Mono<ResponseDto<Void>> rejectChatRequest(
+            @RequestBody RejectChatRequestDto rejectChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mainChatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+        return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.getChatRoomId(), userDetails.user().getUserId(), rejectChatRequestDto.getMessage());
     }
 }

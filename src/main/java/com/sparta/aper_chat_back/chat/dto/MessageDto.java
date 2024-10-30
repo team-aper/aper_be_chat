@@ -17,9 +17,6 @@ public class MessageDto {
     @JsonProperty("senderId")
     private Long memberId;
 
-    @JsonProperty("message")
-    private String message;
-
     @JsonProperty("content")
     private String content;
 
@@ -34,23 +31,23 @@ public class MessageDto {
     public MessageDto(
             @JsonProperty("chatRoomId") Long chatRoomId,
             @JsonProperty("senderId") Long memberId,
-            @JsonProperty("message") String message,
+            @JsonProperty("content") String content,
             @JsonProperty("regDate") LocalDateTime regDate,
             @JsonProperty("system") Long sysNum) {
         this.id = 1L;
         this.chatRoomId = chatRoomId;
         this.memberId = memberId;
-        this.message = message;
+        this.content = content;
         this.regDate = regDate;
         this.sysNum = sysNum;
     }
 
-    public MessageDto(Long chatRoomId, String message, Long userId, Long systemId) {
+    public MessageDto(Long chatRoomId, String content, Long userId, Long systemId) {
         this.chatRoomId = chatRoomId;
         this.memberId = userId;
-        this.message = message;
         this.sysNum = systemId;
         this.regDate = LocalDateTime.now();
+        this.content = content;
     }
 
 
@@ -60,7 +57,7 @@ public class MessageDto {
     }
 
     public void setMessage(String sysMsg) {
-        this.message = sysMsg;
+        this.content = sysMsg;
     }
 
 }

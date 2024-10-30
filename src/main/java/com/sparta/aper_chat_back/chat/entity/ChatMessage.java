@@ -1,7 +1,6 @@
 package com.sparta.aper_chat_back.chat.entity;
 
 import com.sparta.aper_chat_back.chat.dto.MessageDto;
-import com.sparta.aper_chat_back.chat.dto.MessageRequestDto;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -17,23 +16,18 @@ public class ChatMessage {
     private ObjectId id;
     private Long senderId;
     private Long chatRoomId;
+    private Long sysNum;
     private String content;
     private Boolean read;
     private LocalDateTime timestamp;
 
-    public ChatMessage() {}
 
-    public ChatMessage(MessageRequestDto requestDto) {
-        this.senderId = requestDto.getSenderId();
-        this.chatRoomId = requestDto.getChatRoomId();
-        this.content = requestDto.getContent();
-        this.timestamp = LocalDateTime.now();
-        this.read = Boolean.FALSE;
-    }
+    public ChatMessage() {}
 
     public ChatMessage(MessageDto messageDto) {
         this.senderId = messageDto.getId();
         this.chatRoomId = messageDto.getChatRoomId();
+        this.sysNum = messageDto.getSysNum();
         this.content = messageDto.getContent();
         this.timestamp = messageDto.getRegDate();
         this.read = Boolean.TRUE;

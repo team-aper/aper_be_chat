@@ -2,6 +2,7 @@ package com.sparta.aper_chat_back.global.docs;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
+import com.sparta.aper_chat_back.chat.dto.RejectChatRequestDto;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
 import com.sparta.aper_chat_back.global.security.dto.ErrorResponseDto;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsImpl;
@@ -54,7 +55,7 @@ public interface ChatControllerDocs {
             @ApiResponse(responseCode = "404", description = "해당 채팅방 요청을 찾을 수 없음 (ErrorCode: CH001 - 존재하지 않는 채팅방입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<Void> rejectChatRequest(
-            @PathVariable Long roomId,
+    Mono<ResponseDto<Void>> rejectChatRequest(
+            RejectChatRequestDto rejectChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails);
 }
