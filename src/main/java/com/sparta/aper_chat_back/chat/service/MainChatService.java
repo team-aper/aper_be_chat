@@ -163,16 +163,15 @@ public class MainChatService {
         }
         User tutor = optionalTutor.get();
 
+        String serviceMessage = String.format("%s 님이 아래와 같은 사유로 수업을 거절했어요.", tutor.getPenName());
+        MessageDto systemRejectMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 3L);
+        Mono<ChatMessage> systemMessageMono = chatService.saveMessage(systemRejectMessage);
+
         MessageDto userRequestMessage = new MessageDto(chatRoomId, message, tutorId, 0L);
         Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
 
-        String serviceMessage = String.format("%s 님이 아래와 같은 사유로 수업을 거절했어요.", tutor.getPenName());
-        MessageDto systemRejectMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 3L); // 3 - 학생과 튜터 모두에게 보여주는 시스템 메시지.
-        MessageDto rejectReasonMessage = new MessageDto(chatRoomId, message, 0L, 4L); // 4 - 모두에게 보여주는 크기가 작은 글씨를 의미. + system 메시지 연속으로 나오면 연결되게 블록 만들도록 해야 함.
-
-        return userMessageMono
-                .then(chatService.saveMessage(systemRejectMessage))
-                .then(chatService.saveMessage(rejectReasonMessage))
+        return systemMessageMono
+                .then(userMessageMono)
                 .then();
     }
 
