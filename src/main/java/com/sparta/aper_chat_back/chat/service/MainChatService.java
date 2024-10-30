@@ -43,20 +43,35 @@ public class MainChatService {
 
     @Transactional
     public Mono<ResponseDto<Void>> createChat(Long userId, Long tutorId, String message) {
-        ChatRoom chatRoom = new ChatRoom();
+        return isCreatedChat(userId, tutorId)
+                .flatMap(isCreated -> {
+                    ChatRoom chatRoom;
 
-        User user = findByIdAndCheckPresent(userId, false);
-        User tutor = findByIdAndCheckPresent(tutorId, true);
+                    if (isCreated) {
+                        // 기존 채팅방 사용
+                        Long chatRoomId = createdChatRoomId(userId, tutorId);
+                        chatRoom = chatRoomRepository.findById(chatRoomId)
+                                .orElseThrow(() -> new RuntimeException(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+                    } else {
+                        // 새로운 채팅방 생성
+                        chatRoom = new ChatRoom();
+                        chatRoomRepository.save(chatRoom);
+                    }
 
-        ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
-        ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
+                    // 사용자 및 튜터 찾기
+                    User user = findByIdAndCheckPresent(userId, false);
+                    User tutor = findByIdAndCheckPresent(tutorId, true);
 
-        chatRoomRepository.save(chatRoom);
-        chatParticipantRepository.save(userChatParticipant);
-        chatParticipantRepository.save(tutorChatParticipant);
+                    // 채팅 참여자 추가
+                    ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
+                    ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
+                    chatParticipantRepository.save(userChatParticipant);
+                    chatParticipantRepository.save(tutorChatParticipant);
 
-        return sendRequestSystemMessage(chatRoom.getId(), message, userId, user.getPenName())
-                .thenReturn(ResponseDto.success(ChatMessageEnum.CREATE_CHAT_SUCCESS.getMessage()));
+                    // 시스템 메시지 전송
+                    return sendRequestSystemMessage(chatRoom.getId(), message, userId, user.getPenName())
+                            .thenReturn(ResponseDto.success(ChatMessageEnum.CREATE_CHAT_SUCCESS.getMessage()));
+                });
     }
 
     private Mono<Void> sendRequestSystemMessage(Long chatRoomId, String message, Long userId, String userPenName) {
@@ -82,6 +97,14 @@ public class MainChatService {
             List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
             return !existingChatRoom.isEmpty();
         });
+    }
+
+    @Transactional
+    public Long createdChatRoomId(Long userId, Long tutorId) {
+        String tag = tutorId + "-" + userId;
+        viewRepository.updateChatRoomParticipantsView();
+        ChatRoomView participatingChat = (ChatRoomView) viewRepository.findByParticipants(tag);
+        return participatingChat.getChatRoomId();
     }
 
     @Transactional

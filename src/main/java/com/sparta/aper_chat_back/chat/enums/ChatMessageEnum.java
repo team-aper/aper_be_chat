@@ -9,6 +9,7 @@ public enum ChatMessageEnum {
     ALREADY_REJECTED("이미 요청을 거절하셨습니다."),
     ALREADY_CREATED("이미 생성된 채팅방 입니다."),
     CHAT_REQUEST_MISSING("해당 채팅방 형성 요청이 없습니다."),
+    CHAT_NOT_FOUND("채팅방을 찾을 수 없습니다."),
     CHAT_REQUESTED("1:1 수업 요청을 보냈어요. 곧 답변이 올거에요. 조금만 기다려주세요.");
 
     private final String message;
