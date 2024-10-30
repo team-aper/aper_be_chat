@@ -1,6 +1,7 @@
 package com.sparta.aper_chat_back.global.docs;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
+import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
 import com.sparta.aper_chat_back.global.security.dto.ErrorResponseDto;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsImpl;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -27,8 +30,8 @@ public interface ChatControllerDocs {
             @ApiResponse(responseCode = "404", description = "튜터를 찾을 수 없음 (ErrorCode: CH001 - 존재하지 않는 튜터입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<Void> createChat(
-            @PathVariable Long tutorId,
+    Mono<ResponseDto<Void>> createChat(
+            CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails);
 
     @Operation(summary = "참여 중인 채팅방 조회", description = "사용자가 참여 중이며 거절되지 않은 채팅방 목록을 반환합니다.")

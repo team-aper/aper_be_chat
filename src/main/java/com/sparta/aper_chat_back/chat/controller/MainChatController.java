@@ -1,6 +1,7 @@
 package com.sparta.aper_chat_back.chat.controller;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
+import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
 import com.sparta.aper_chat_back.chat.service.ChatService;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
 import com.sparta.aper_chat_back.global.docs.ChatControllerDocs;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -21,15 +23,22 @@ public class MainChatController implements ChatControllerDocs {
 
     private final MainChatService mainChatService;
 
-    @PostMapping("/{tutorId}")
-    public ResponseDto<Void> createChat(
-            @PathVariable Long tutorId,
+    @PostMapping("/chat")
+    public Mono<ResponseDto<Void>> createChat(
+            @RequestBody CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        if (mainChatService.isCreatedChat(userId, tutorId)) {
-            return ResponseDto.fail("이미 생성된 채팅방 입니다.");
-        }
-        return mainChatService.createChat(userId, tutorId);
+        Long tutorId = createChatRequestDto.getTutorId();
+
+        // 비동기적으로 이미 생성된 채팅방인지 확인
+        return mainChatService.isCreatedChat(userId, tutorId)
+                .flatMap(isCreated -> {
+                    if (isCreated) {
+                        return Mono.just(ResponseDto.fail("이미 생성된 채팅방 입니다."));
+                    }
+                    // 채팅방 생성 요청
+                    return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
+                });
     }
 
     @GetMapping

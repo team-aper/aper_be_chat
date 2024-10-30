@@ -1,0 +1,21 @@
+package com.sparta.aper_chat_back.chat.enums;
+
+public enum ChatMessageEnum {
+    CREATE_CHAT_SUCCESS("성공적으로 채팅방을 생성하였습니다."),
+    NO_PARTICIPATING_CHAT("참여 중인 채팅방이 없습니다."),
+    FIND_CHAT_SUCCESS("성공적으로 채팅방을 찾았습니다."),
+    REQUEST_REJECTED("요청을 거절하였습니다."),
+    ALREADY_ACCEPTED("이미 요청을 수락하셨습니다."),
+    ALREADY_REJECTED("이미 요청을 거절하셨습니다."),
+    CHAT_REQUEST_MISSING("해당 채팅방 형성 요청이 없습니다.");
+
+    private final String message;
+
+    ChatMessageEnum(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

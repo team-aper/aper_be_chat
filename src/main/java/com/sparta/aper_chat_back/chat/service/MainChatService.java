@@ -1,9 +1,12 @@
 package com.sparta.aper_chat_back.chat.service;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
+import com.sparta.aper_chat_back.chat.dto.MessageDto;
+import com.sparta.aper_chat_back.chat.entity.ChatMessage;
 import com.sparta.aper_chat_back.chat.entity.ChatParticipant;
 import com.sparta.aper_chat_back.chat.entity.ChatRoom;
 import com.sparta.aper_chat_back.chat.entity.ChatRoomView;
+import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
 import com.sparta.aper_chat_back.chat.repository.ChatParticipantRepository;
 import com.sparta.aper_chat_back.chat.repository.ChatRoomRepository;
 import com.sparta.aper_chat_back.chat.repository.ChatRoomViewRepository;
@@ -14,6 +17,7 @@ import com.sparta.aper_chat_back.global.security.user.User;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +30,18 @@ public class MainChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatParticipantRepository chatParticipantRepository;
     private final ChatRoomViewRepository viewRepository;
+    private final ChatService chatService;
 
-    public MainChatService(UserRepository userRepository, ChatRoomRepository chatRoomRepository, ChatParticipantRepository chatParticipantRepository, ChatRoomViewRepository viewRepository) {
+    public MainChatService(UserRepository userRepository, ChatRoomRepository chatRoomRepository, ChatParticipantRepository chatParticipantRepository, ChatRoomViewRepository viewRepository, ChatService chatService) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatParticipantRepository = chatParticipantRepository;
         this.viewRepository = viewRepository;
+        this.chatService = chatService;
     }
 
     @Transactional
-    public ResponseDto<Void> createChat(Long userId, Long tutorId) {
+    public Mono<ResponseDto<Void>> createChat(Long userId, Long tutorId, String message) {
         ChatRoom chatRoom = new ChatRoom();
 
         User user = findByIdAndCheckPresent(userId, false);
@@ -44,21 +50,34 @@ public class MainChatService {
         ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
         ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
 
-
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(userChatParticipant);
         chatParticipantRepository.save(tutorChatParticipant);
 
-        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
+        return sendSystemMessage(chatRoom.getId(), message, userId, user.getPenName())
+                .thenReturn(ResponseDto.success(ChatMessageEnum.CREATE_CHAT_SUCCESS.getMessage()));
+    }
+
+    private Mono<Void> sendSystemMessage(Long chatRoomId, String message, Long userId, String userPenName) {
+        MessageDto userRequestMessage = new MessageDto(chatRoomId, message, userId, 0L);
+        Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
+
+        String serviceMessage = String.format("1:1 수업 요청이 도착했어요. %s님과 1:1 수업을 진행할까요?", userPenName);
+        MessageDto systemRequestMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 1L);
+
+        return userMessageMono
+                .then(chatService.saveMessage(systemRequestMessage))
+                .then();
     }
 
     @Transactional
-    public boolean isCreatedChat(Long userId, Long tutorId) {
-        String tag = tutorId + "-" + userId;
-        viewRepository.updateChatRoomParticipantsView();
-        List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
-
-        return !existingChatRoom.isEmpty();
+    public Mono<Boolean> isCreatedChat(Long userId, Long tutorId) {
+        return Mono.fromSupplier(() -> {
+            String tag = tutorId + "-" + userId;
+            viewRepository.updateChatRoomParticipantsView();
+            List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
+            return !existingChatRoom.isEmpty();
+        });
     }
 
     @Transactional
@@ -66,7 +85,7 @@ public class MainChatService {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
         if (participatingChats.isEmpty()) {
-            return ResponseDto.fail("참여 중인 채팅방이 없습니다");
+            return ResponseDto.fail(ChatMessageEnum.NO_PARTICIPATING_CHAT.getMessage());
         }
 
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
@@ -83,7 +102,7 @@ public class MainChatService {
             }
         }
 
-        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+        return ResponseDto.success(ChatMessageEnum.FIND_CHAT_SUCCESS.getMessage(), participatingResponseDtos);
     }
 
     @Transactional
@@ -91,21 +110,21 @@ public class MainChatService {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
-            return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
+            return ResponseDto.fail(ChatMessageEnum.CHAT_REQUEST_MISSING.getMessage());
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (chatRoom.getIsAccepted()) {
-            return ResponseDto.fail("이미 요청을 수락하셨습니다.");
+            return ResponseDto.fail(ChatMessageEnum.ALREADY_ACCEPTED.getMessage());
         }
         if (chatRoom.getIsRejected()) {
-            return ResponseDto.fail("이미 요청을 거절하셨습니다.");
+            return ResponseDto.fail(ChatMessageEnum.ALREADY_REJECTED.getMessage());
         }
 
         chatRoom.reject();
         chatRoomRepository.save(chatRoom);
 
-        return ResponseDto.success("요청을 거절하였습니다.");
+        return ResponseDto.success(ChatMessageEnum.REQUEST_REJECTED.getMessage());
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {

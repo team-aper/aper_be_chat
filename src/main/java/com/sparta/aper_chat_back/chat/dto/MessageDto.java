@@ -23,6 +23,9 @@ public class MessageDto {
     @JsonProperty("content")
     private String content;
 
+    @JsonProperty("system")
+    private Long sysNum;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime regDate;
 
@@ -32,13 +35,24 @@ public class MessageDto {
             @JsonProperty("chatRoomId") Long chatRoomId,
             @JsonProperty("senderId") Long memberId,
             @JsonProperty("message") String message,
-            @JsonProperty("regDate") LocalDateTime regDate) {
+            @JsonProperty("regDate") LocalDateTime regDate,
+            @JsonProperty("system") Long sysNum) {
         this.id = 1L;
         this.chatRoomId = chatRoomId;
         this.memberId = memberId;
         this.message = message;
         this.regDate = regDate;
+        this.sysNum = sysNum;
     }
+
+    public MessageDto(Long chatRoomId, String message, Long userId, Long systemId) {
+        this.chatRoomId = chatRoomId;
+        this.memberId = userId;
+        this.message = message;
+        this.sysNum = systemId;
+        this.regDate = LocalDateTime.now();
+    }
+
 
 
     public void setRegDate(LocalDateTime now) {
