@@ -118,7 +118,7 @@ public class MainChatService {
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
         for (ChatParticipant chatParticipant : participatingChats) {
             ChatRoom chatRoom = chatParticipant.getChatRoom();
-            if (!chatRoom.getIsRejected()) {
+            if (chatRoom.getIsAccepted() == 1L) {
                 ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
                         chatRoom.getId(),
                         chatParticipant.getIsTutor(),
@@ -141,10 +141,13 @@ public class MainChatService {
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
-        if (chatRoom.getIsAccepted()) {
+        if (!chatRoom.getIsRequested()) {
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.REQUEST_NOT_FOUND.getMessage()));
+        }
+        if (chatRoom.getIsAccepted() == 1L) {
             return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_ACCEPTED.getMessage()));
         }
-        if (chatRoom.getIsRejected()) {
+        if (chatRoom.getIsAccepted() == -1L) {
             return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_REJECTED.getMessage()));
         }
 
