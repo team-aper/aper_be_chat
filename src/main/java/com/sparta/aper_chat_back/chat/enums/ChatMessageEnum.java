@@ -13,7 +13,10 @@ public enum ChatMessageEnum {
     CHAT_REQUESTED("1:1 수업 요청을 보냈어요. 곧 답변이 올거에요. 조금만 기다려주세요."),
     REQUEST_NOT_FOUND("튜터 신청 요청을 찾을 수 없습니다."),
     CHAT_ACCEPTED("요청을 수락하셨습니다."),
-    CHAT_MONITORED("모든 대화과정은 모니터링되고 있으며, 혹시나 생기는 문제나 수업과 관련된 문의는 고객센터에서 해결해 드려요.");
+    CHAT_MONITORED("모든 대화과정은 모니터링되고 있으며, 혹시나 생기는 문제나 수업과 관련된 문의는 고객센터에서 해결해 드려요."),
+    TERMINATE_CHAT_NOT_FOUND("종료할 대화를 찾을 수 없습니다."),
+    CHAT_TERMINATED("채팅을 종료하였습니다."),
+    SYSTEM_TERMINATE("수업이 종료되었습니다.");
 
     private final String message;
 

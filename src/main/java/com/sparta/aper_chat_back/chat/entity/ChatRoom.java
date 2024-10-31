@@ -38,4 +38,9 @@ public class ChatRoom {
         this.isAccepted = isAccepted;
         this.isRequested = Boolean.FALSE;
     }
+
+    public void setTerminate(long terminate) {
+        this.isAccepted = terminate;
+        this.isRequested = Boolean.FALSE;
+    }
 }

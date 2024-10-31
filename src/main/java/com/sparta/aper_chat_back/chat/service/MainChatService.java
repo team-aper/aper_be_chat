@@ -232,4 +232,24 @@ public class MainChatService {
     }
 
 
+    public Mono<ResponseDto<Void>> terminateChat(Long chatRoomId) {
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(chatRoomId);
+        if (optionalChatRoom.isEmpty()) {
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+        }
+        ChatRoom chatRoom = optionalChatRoom.get();
+
+        if (chatRoom.getIsAccepted() != 1) {
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.TERMINATE_CHAT_NOT_FOUND.getMessage()));
+        }
+
+        chatRoom.setTerminate(-1L);
+        chatRoomRepository.save(chatRoom);
+
+        MessageDto systemTerminateMessage = new MessageDto(chatRoomId, ChatMessageEnum.SYSTEM_TERMINATE.getMessage(), 0L, 4L);
+        Mono<ChatMessage> systemMessage = chatService.saveMessage(systemTerminateMessage);
+
+        return systemMessage.
+                then(Mono.just(ResponseDto.success(ChatMessageEnum.CHAT_TERMINATED.getMessage())));
+    }
 }
