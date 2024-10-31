@@ -33,4 +33,9 @@ public class ChatRoom {
     public void reject() {
         this.isAccepted = -1L;
     }
+
+    public void setIsAccepted(long isAccepted) {
+        this.isAccepted = isAccepted;
+        this.isRequested = Boolean.FALSE;
+    }
 }

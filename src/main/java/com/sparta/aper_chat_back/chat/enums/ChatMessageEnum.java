@@ -11,7 +11,9 @@ public enum ChatMessageEnum {
     CHAT_REQUEST_MISSING("해당 채팅방 형성 요청이 없습니다."),
     CHAT_NOT_FOUND("채팅방을 찾을 수 없습니다."),
     CHAT_REQUESTED("1:1 수업 요청을 보냈어요. 곧 답변이 올거에요. 조금만 기다려주세요."),
-    REQUEST_NOT_FOUND("튜터 신청 요청을 찾을 수 없습니다.");
+    REQUEST_NOT_FOUND("튜터 신청 요청을 찾을 수 없습니다."),
+    CHAT_ACCEPTED("요청을 수락하셨습니다."),
+    CHAT_MONITORED("모든 대화과정은 모니터링되고 있으며, 혹시나 생기는 문제나 수업과 관련된 문의는 고객센터에서 해결해 드려요.");
 
     private final String message;
 

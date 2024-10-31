@@ -191,4 +191,45 @@ public class MainChatService {
     }
 
 
+    @Transactional
+    public Mono<ResponseDto<Void>> acceptChatRequest(Long chatRoomId, Long tutorId) {
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(chatRoomId);
+
+        if (optionalChatRoom.isEmpty()) {
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+        }
+        ChatRoom chatRoom = optionalChatRoom.get();
+
+        if (!chatRoom.getIsRequested()) {
+            return Mono.just(ResponseDto.fail(ChatMessageEnum.REQUEST_NOT_FOUND.getMessage()));
+        }
+
+        chatRoom.setIsAccepted(1L);
+        chatRoomRepository.save(chatRoom);
+
+        return sendAcceptSystemMessage(chatRoomId, tutorId).
+            then(Mono.just(ResponseDto.success(ChatMessageEnum.CHAT_ACCEPTED.getMessage())));
+    }
+
+    private Mono<Void> sendAcceptSystemMessage(Long chatRoomId, Long tutorId) {
+        Optional<User> OptionalTutor = userRepository.findById(tutorId);
+        if (OptionalTutor.isEmpty()) {
+            return Mono.error(new RuntimeException(UserEnum.USER_NOT_FOUND.getMessage()));
+        }
+
+        User tutor = OptionalTutor.get();
+
+        String serviceMessage = String.format("%s 님이 수업 요청을 수락했어요. 수업을 시작합니다.", tutor.getPenName());
+        MessageDto systemRejectMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 3L);
+        Mono<ChatMessage> systemMessageMono = chatService.saveMessage(systemRejectMessage);
+
+        MessageDto userRequestMessage = new MessageDto(chatRoomId, ChatMessageEnum.CHAT_MONITORED.getMessage(), 0L, 4L);
+        Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
+
+        return systemMessageMono
+                .then(userMessageMono)
+                .then();
+    }
+
+
 }
