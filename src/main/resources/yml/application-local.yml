@@ -19,6 +19,7 @@ spring:
     port: 5672
     username: ${local.rabbitmq.username}
     password: ${local.rabbitmq.password}
+    relay-host: ${local.rabbitmq.relay-host}
 
 mongodb:
   uri: ${local.mongodb.uri}

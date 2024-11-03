@@ -26,13 +26,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${local.rabbitmq.password}")
     private String rabbitMqPassword;
 
+    @Value("${spring.rabbitmq.relay-host}")
+    private String relayHost;
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setPathMatcher(new AntPathMatcher("."));
         registry.setApplicationDestinationPrefixes("/pub");
 
         registry.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
-                .setRelayHost("localhost")
+                .setRelayHost(relayHost)
                 .setRelayPort(61613)
                 .setSystemLogin(rabbitMqUsername)
                 .setSystemPasscode(rabbitMqPassword)

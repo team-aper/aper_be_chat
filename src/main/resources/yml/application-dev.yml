@@ -10,6 +10,7 @@ spring:
     port: ${dev.rabbitmq.port}
     username: ${dev.rabbitmq.username}
     password: ${dev.rabbitmq.password}
+    relay-host: ${dev.rabbitmq.relay-host}
 
   datasource:
     url: ${dev.mysql.url}
