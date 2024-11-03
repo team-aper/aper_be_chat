@@ -5,6 +5,12 @@ spring:
     activate:
       on-profile: dev
 
+  rabbitmq:
+    host: ${dev.rabbitmq.host}
+    port: ${dev.rabbitmq.port}
+    username: ${dev.rabbitmq.username}
+    password: ${dev.rabbitmq.password}
+
 
 springdoc:
   swagger-ui:
