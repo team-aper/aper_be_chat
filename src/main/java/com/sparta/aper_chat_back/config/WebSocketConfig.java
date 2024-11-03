@@ -20,10 +20,10 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${local.rabbitmq.username}")
+    @Value("${spring.rabbitmq.username}")
     private String rabbitMqUsername;
 
-    @Value("${local.rabbitmq.password}")
+    @Value("${spring.rabbitmq.password}")
     private String rabbitMqPassword;
 
     @Value("${spring.rabbitmq.relay-host}")
