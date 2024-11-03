@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8082")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/chat")
 @RequiredArgsConstructor
