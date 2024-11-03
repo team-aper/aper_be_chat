@@ -11,6 +11,12 @@ spring:
     username: ${dev.rabbitmq.username}
     password: ${dev.rabbitmq.password}
 
+  datasource:
+    url: ${dev.mysql.url}
+    username: ${dev.mysql.username}
+    password: ${dev.mysql.password}
+    driver-class-name: ${dev.mysql.driver-class-name}
+
 
 springdoc:
   swagger-ui:
