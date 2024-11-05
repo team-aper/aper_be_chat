@@ -19,28 +19,32 @@ public class ChatRoom {
 
     private Boolean isRequested;
 
-    private Long isAccepted;
+    private Boolean isAccepted;
 
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     public ChatRoom(){
         this.startTime = LocalDateTime.now();
-        this.isAccepted = -1L;
+        this.isAccepted = Boolean.FALSE;
         this.isRequested = Boolean.FALSE;
     }
 
     public void reject() {
-        this.isAccepted = -1L;
+        this.isAccepted = Boolean.FALSE;
     }
 
-    public void setIsAccepted(long isAccepted) {
+    public void setIsAccepted(Boolean isAccepted) {
         this.isAccepted = isAccepted;
         this.isRequested = Boolean.FALSE;
     }
 
-    public void setTerminate(long terminate) {
+    public void setTerminate(Boolean terminate) {
         this.isAccepted = terminate;
         this.isRequested = Boolean.FALSE;
+    }
+
+    public void setIsRequested(Boolean aTrue) {
+        this.isRequested = aTrue;
     }
 }

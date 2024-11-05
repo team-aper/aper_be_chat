@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record ChatParticipatingResponseDto(
     Long chatRoomId,
     Boolean isTutor,
-    Long isAccepted,
+    Boolean isAccepted,
     LocalDateTime startTime
 
 ) {

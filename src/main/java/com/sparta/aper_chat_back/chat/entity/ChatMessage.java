@@ -30,6 +30,5 @@ public class ChatMessage {
         this.sysNum = messageDto.getSysNum();
         this.content = messageDto.getContent();
         this.timestamp = messageDto.getRegDate();
-        this.read = Boolean.TRUE;
     }
 }

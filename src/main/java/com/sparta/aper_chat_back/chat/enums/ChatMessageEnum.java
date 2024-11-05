@@ -16,7 +16,8 @@ public enum ChatMessageEnum {
     CHAT_MONITORED("모든 대화과정은 모니터링되고 있으며, 혹시나 생기는 문제나 수업과 관련된 문의는 고객센터에서 해결해 드려요."),
     TERMINATE_CHAT_NOT_FOUND("종료할 대화를 찾을 수 없습니다."),
     CHAT_TERMINATED("채팅을 종료하였습니다."),
-    SYSTEM_TERMINATE("수업이 종료되었습니다.");
+    SYSTEM_TERMINATE("수업이 종료되었습니다."),
+    ALREADY_ACCEPTED_CHATROOM("이미 요청이 수락된 채팅방 입니다.");
 
     private final String message;
 

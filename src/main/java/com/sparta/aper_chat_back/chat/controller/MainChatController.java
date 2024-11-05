@@ -32,37 +32,31 @@ public class MainChatController implements ChatControllerDocs {
             @RequestBody CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        //Long userId = 1L;
+        //Long userId = 4L;
         Long tutorId = createChatRequestDto.getTutorId();
 
-        // 비동기적으로 이미 생성된 채팅방인지 확인
-        return mainChatService.isCreatedChat(userId, tutorId)
-                .flatMap(isCreated -> {
-                    if (isCreated) {
-                        return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_CREATED.getMessage()));
-                    }
-                    // 채팅방 생성 요청
-                    return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
-                });
+        return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
     }
 
     @GetMapping
     public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainChatService.getParticipatingChats(userDetails.user().getUserId());
+        //return mainChatService.getParticipatingChats(4L);
     }
 
     @GetMapping("/{chatRoomId}")
     public Mono<ResponseDto<Void>> acceptChatRequest(@PathVariable Long chatRoomId,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainChatService.acceptChatRequest(chatRoomId, userDetails.user().getUserId());
+        //return mainChatService.acceptChatRequest(chatRoomId, 6L);
     }
 
     @DeleteMapping("/status")
     public Mono<ResponseDto<Void>> rejectChatRequest(
             @RequestBody RejectChatRequestDto rejectChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        //return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.getChatRoomId(), 5L, rejectChatRequestDto.getMessage());
+        //return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.getChatRoomId(), 6L, rejectChatRequestDto.getMessage());
         return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.getChatRoomId(), userDetails.user().getUserId(), rejectChatRequestDto.getMessage());
     }
 
