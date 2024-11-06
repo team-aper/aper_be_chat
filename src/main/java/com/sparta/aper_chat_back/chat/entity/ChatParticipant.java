@@ -4,6 +4,8 @@ import com.sparta.aper_chat_back.global.security.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 public class ChatParticipant {
@@ -22,11 +24,17 @@ public class ChatParticipant {
 
     private Boolean isTutor;
 
+    private LocalDateTime lastVisited;
+
     public ChatParticipant(){}
 
     public ChatParticipant(ChatRoom chatRoom, User user, Boolean isTutor) {
         this.chatRoom = chatRoom;
         this.user = user;
         this.isTutor = isTutor;
+    }
+
+    public void setLastVisited() {
+        this.lastVisited = LocalDateTime.now();
     }
 }

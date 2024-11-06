@@ -17,6 +17,7 @@ import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
 import com.sparta.aper_chat_back.global.security.user.User;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -253,5 +254,15 @@ public class MainChatService {
 
         return systemMessage.
                 then(Mono.just(ResponseDto.success(ChatMessageEnum.CHAT_TERMINATED.getMessage())));
+    }
+
+    @Transactional
+    public void heartbeat(Long chatRoomId, Long userId) {
+        Optional<ChatParticipant> optionalParticipant = chatParticipantRepository.findByChatRoomIdAndUserUserId(chatRoomId, userId);
+        if (optionalParticipant.isPresent()) {
+            ChatParticipant participant = optionalParticipant.get();
+            participant.setLastVisited();
+            chatParticipantRepository.save(participant);
+        }
     }
 }
