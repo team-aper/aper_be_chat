@@ -38,12 +38,13 @@ public class MainChatController implements ChatControllerDocs {
         return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
     }
 
-    @GetMapping
-    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mainChatService.getParticipatingChats(userDetails.user().getUserId());
-        //return mainChatService.getParticipatingChats(4L);
-    }
+    //maybe to be deleted
+//    @GetMapping
+//    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return mainChatService.getParticipatingChats(userDetails.user().getUserId());
+//        //return mainChatService.getParticipatingChats(4L);
+//    }
 
     @GetMapping("/{chatRoomId}")
     public Mono<ResponseDto<Void>> acceptChatRequest(@PathVariable Long chatRoomId,
@@ -51,6 +52,13 @@ public class MainChatController implements ChatControllerDocs {
         return mainChatService.acceptChatRequest(chatRoomId, userDetails.user().getUserId());
         //return mainChatService.acceptChatRequest(chatRoomId, 6L);
     }
+
+    @GetMapping("/status/chatRoom")
+    public ResponseDto<List<ChatParticipatingResponseDto>> checkReadStatus(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mainChatService.checkReadStatus(userDetails.user().getUserId());
+        //return mainChatService.checkReadStatus(1L);
+    }
+
 
     @DeleteMapping("/status")
     public Mono<ResponseDto<Void>> rejectChatRequest(

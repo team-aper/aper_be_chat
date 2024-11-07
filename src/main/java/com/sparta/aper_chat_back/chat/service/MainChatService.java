@@ -16,12 +16,11 @@ import com.sparta.aper_chat_back.global.handler.exception.ServiceException;
 import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
 import com.sparta.aper_chat_back.global.security.user.User;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +84,7 @@ public class MainChatService {
         String serviceMessage = String.format("1:1 수업 요청이 도착했어요. %s님과 1:1 수업을 진행할까요?", userPenName);
         MessageDto systemRequestMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 1L);
 
-        MessageDto requestedMessage = new MessageDto(chatRoomId, ChatMessageEnum.CHAT_REQUESTED.getMessage(), 0L, 2L);
+        MessageDto requestedMessage = new MessageDto(chatRoomId, ChatMessageEnum.CHAT_REQUESTED.getMessage(), 0L, 2L, LocalDateTime.now().plusSeconds(1));
 
         return userMessageMono
                 .then(chatService.saveMessage(systemRequestMessage))
@@ -111,8 +110,33 @@ public class MainChatService {
         return participatingChatList.get(0).getChatRoomId();
     }
 
-    @Transactional
-    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+//    @Transactional // maybe to be deleted
+//    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+//        List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
+//
+//        if (participatingChats.isEmpty()) {
+//            return ResponseDto.fail(ChatMessageEnum.NO_PARTICIPATING_CHAT.getMessage());
+//        }
+//
+//        List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
+//        for (ChatParticipant chatParticipant : participatingChats) {
+//            ChatRoom chatRoom = chatParticipant.getChatRoom();
+//            if (chatRoom.getIsAccepted()) {
+//                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
+//                        chatRoom.getId(),
+//                        chatParticipant.getIsTutor(),
+//                        chatRoom.getIsAccepted(),
+//                        chatRoom.getStartTime(),
+//                        Boolean.FALSE
+//                );
+//                participatingResponseDtos.add(participatingResponseDto);
+//            }
+//        }
+//
+//        return ResponseDto.success(ChatMessageEnum.FIND_CHAT_SUCCESS.getMessage(), participatingResponseDtos);
+//    }
+
+    public ResponseDto<List<ChatParticipatingResponseDto>> checkReadStatus(Long userId) {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
         if (participatingChats.isEmpty()) {
@@ -121,19 +145,44 @@ public class MainChatService {
 
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
         for (ChatParticipant chatParticipant : participatingChats) {
-            ChatRoom chatRoom = chatParticipant.getChatRoom();
-            if (chatRoom.getIsAccepted()) {
-                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
-                        chatRoom.getId(),
-                        chatParticipant.getIsTutor(),
-                        chatRoom.getIsAccepted(),
-                        chatRoom.getStartTime()
-                );
-                participatingResponseDtos.add(participatingResponseDto);
+            Long roomId = chatParticipant.getChatRoom().getId();
+
+            ChatMessage latestMessage = chatService.getLatestMessage(roomId).block();
+            
+            if (latestMessage == null){
+                continue;
             }
+            ChatParticipatingResponseDto participatingResponseDto = getChatParticipatingResponseDto(chatParticipant, latestMessage, roomId);
+            participatingResponseDtos.add(participatingResponseDto);
         }
 
         return ResponseDto.success(ChatMessageEnum.FIND_CHAT_SUCCESS.getMessage(), participatingResponseDtos);
+    }
+
+    private static ChatParticipatingResponseDto getChatParticipatingResponseDto(ChatParticipant chatParticipant, ChatMessage latestMessage, Long roomId) {
+        String messageContent = latestMessage.getContent();
+        LocalDateTime messageTimeStamp = latestMessage.getTimestamp();
+
+        ChatParticipatingResponseDto participatingResponseDto;
+        if (chatParticipant.getLastVisited().isBefore(messageTimeStamp)) {
+            participatingResponseDto = new ChatParticipatingResponseDto(
+                    roomId,
+                    chatParticipant.getIsTutor(),
+                    Boolean.FALSE,
+                    messageContent,
+                    messageTimeStamp
+            );
+        }
+        else {
+            participatingResponseDto = new ChatParticipatingResponseDto(
+                    roomId,
+                    chatParticipant.getIsTutor(),
+                    Boolean.TRUE,
+                    messageContent,
+                    messageTimeStamp
+            );
+        }
+        return participatingResponseDto;
     }
 
     @Transactional
@@ -172,7 +221,7 @@ public class MainChatService {
         MessageDto systemRejectMessage = new MessageDto(chatRoomId, serviceMessage, 0L, 3L);
         Mono<ChatMessage> systemMessageMono = chatService.saveMessage(systemRejectMessage);
 
-        MessageDto userRequestMessage = new MessageDto(chatRoomId, message, tutorId, 0L);
+        MessageDto userRequestMessage = new MessageDto(chatRoomId, message, tutorId, 0L, LocalDateTime.now().plusSeconds(1));
         Mono<ChatMessage> userMessageMono = chatService.saveMessage(userRequestMessage);
 
         return systemMessageMono
@@ -265,4 +314,6 @@ public class MainChatService {
             chatParticipantRepository.save(participant);
         }
     }
+
+
 }

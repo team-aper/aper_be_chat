@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.Getter;
+import org.springframework.jdbc.support.CustomSQLErrorCodesTranslation;
 
 import java.time.LocalDateTime;
 
@@ -50,6 +51,13 @@ public class MessageDto {
         this.content = content;
     }
 
+    public MessageDto(Long chatRoomId, String content, Long userId, Long systemId, LocalDateTime localDateTime) {
+        this.chatRoomId = chatRoomId;
+        this.memberId = userId;
+        this.sysNum = systemId;
+        this.regDate = localDateTime;
+        this.content = content;
+    }
 
 
     public void setRegDate(LocalDateTime now) {
