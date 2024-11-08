@@ -18,6 +18,11 @@ spring:
     password: ${dev.mysql.password}
     driver-class-name: ${dev.mysql.driver-class-name}
 
+  jpa:
+    properties:
+      hibernate:
+        dialect: ${dev.mysql.dialect}
+
 
 springdoc:
   swagger-ui:
