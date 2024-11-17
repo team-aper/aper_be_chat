@@ -1,7 +1,7 @@
 package com.sparta.aper_chat_back.global.handler.exception;
 
 import com.sparta.aper_chat_back.global.security.dto.ErrorResponseDto;
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

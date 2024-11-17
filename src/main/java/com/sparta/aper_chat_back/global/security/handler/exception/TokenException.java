@@ -1,6 +1,6 @@
 package com.sparta.aper_chat_back.global.security.handler.exception;
 
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

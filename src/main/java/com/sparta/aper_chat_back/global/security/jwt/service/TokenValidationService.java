@@ -1,6 +1,6 @@
 package com.sparta.aper_chat_back.global.security.jwt.service;
 
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import com.sparta.aper_chat_back.global.security.handler.exception.TokenException;
 import com.sparta.aper_chat_back.global.security.jwt.dto.TokenVerificationResult;
 import com.sparta.aper_chat_back.global.security.jwt.dto.VerifiedToken;

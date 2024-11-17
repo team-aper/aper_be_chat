@@ -1,7 +1,7 @@
 package com.sparta.aper_chat_back.global.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

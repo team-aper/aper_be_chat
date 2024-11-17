@@ -2,6 +2,7 @@ package com.sparta.aper_chat_back.chat.service;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.MessageDto;
+import com.sparta.aper_chat_back.chat.dto.SimplifiedChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.entity.ChatMessage;
 import com.sparta.aper_chat_back.chat.entity.ChatParticipant;
 import com.sparta.aper_chat_back.chat.entity.ChatRoom;
@@ -13,7 +14,7 @@ import com.sparta.aper_chat_back.chat.repository.ChatRoomRepository;
 import com.sparta.aper_chat_back.chat.repository.ChatRoomViewRepository;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
 import com.sparta.aper_chat_back.global.handler.exception.ServiceException;
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import com.sparta.aper_chat_back.global.security.user.User;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -316,4 +317,27 @@ public class MainChatService {
     }
 
 
+    @Transactional
+    public List<SimplifiedChatParticipatingResponseDto> getSimplifiedParticipatingChats(Long userId) {
+        List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
+
+        if (participatingChats.isEmpty()) {
+            throw new ServiceException(ErrorCode.NO_PARTICIPATING_CHAT);
+        }
+
+        List<SimplifiedChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
+        for (ChatParticipant chatParticipant : participatingChats) {
+            ChatRoom chatRoom = chatParticipant.getChatRoom();
+            SimplifiedChatParticipatingResponseDto participatingResponseDto = new SimplifiedChatParticipatingResponseDto(
+                    chatRoom.getId(),
+                    chatParticipant.getIsTutor(),
+                    chatRoom.getIsAccepted(),
+                    chatRoom.getStartTime()
+            );
+            participatingResponseDtos.add(participatingResponseDto);
+
+        }
+
+        return participatingResponseDtos;
+    }
 }

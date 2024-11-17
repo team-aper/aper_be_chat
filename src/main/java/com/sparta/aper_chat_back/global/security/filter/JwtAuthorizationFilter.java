@@ -1,7 +1,7 @@
 package com.sparta.aper_chat_back.global.security.filter;
 
 import com.sparta.aper_chat_back.global.security.exception.CustomResponseUtil;
-import com.sparta.aper_chat_back.global.security.handler.ErrorCode;
+import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import com.sparta.aper_chat_back.global.security.handler.exception.TokenException;
 import com.sparta.aper_chat_back.global.security.jwt.TokenProvider;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsServiceImpl;
