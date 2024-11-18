@@ -20,6 +20,6 @@ public class TokenBlacklistService {
 
     public boolean isTokenBlacklisted(String token) {
         //String isBlacklisted = redisTemplate.opsForValue().get("blacklist:" + token);
-        return true;
+        return false;
     }
 }
