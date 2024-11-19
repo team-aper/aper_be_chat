@@ -29,9 +29,6 @@ dependencies {
     //swagger implementation
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
@@ -55,7 +52,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
     //LocalDateTime
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.4'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
     //client - implementation
     implementation group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
@@ -63,8 +60,8 @@ dependencies {
 
     //reactor netty
     implementation 'io.projectreactor.netty:reactor-netty:1.0.25'
-
-    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.93.Final:osx-aarch_64'
+    implementation 'net.bytebuddy:byte-buddy:1.14.8'
 
 }
 
