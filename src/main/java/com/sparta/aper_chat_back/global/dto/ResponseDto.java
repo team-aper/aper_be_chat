@@ -1,34 +1,27 @@
 package com.sparta.aper_chat_back.global.dto;
 
-import lombok.Getter;
-
-@Getter
-public class ResponseDto<T> {
-    private boolean status;
-    private String message;
-    private T data;
-
-    public ResponseDto(boolean status, String message, T data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
+public record ResponseDto<T>(int status, String message, T data) {
 
     public static <T> ResponseDto<Void> success(String message) {
-        return new ResponseDto<>(true, message, null);
+        return new ResponseDto<>(200, message, null);
     }
 
     public static <T> ResponseDto<T> success(String message, T data) {
-        return new ResponseDto<>(true, message, data);
+        return new ResponseDto<>(200, message, data);
     }
 
     public static <T> ResponseDto<T> fail(String message) {
         return new ResponseDto<>(
-                false, message, null);
+                400, message, null);
     }
 
     public static <T> ResponseDto<T> fail(String message, T data) {
         return new ResponseDto<>(
-                false, message, data);
+                400, message, data);
     }
+
+    public static <T> ResponseDto<T> redirect(int statusCode, String message) {
+        return new ResponseDto<>(statusCode, message, null);
+    }
+
 }
