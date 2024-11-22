@@ -13,10 +13,6 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -62,6 +58,9 @@ dependencies {
     implementation 'io.projectreactor.netty:reactor-netty:1.0.25'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.93.Final:osx-aarch_64'
     implementation 'net.bytebuddy:byte-buddy:1.14.8'
+
+    //aper-library implementation
+    implementation 'com.github.team-aper:aper-library:0.1.0-dev.0'
 
 }
 
