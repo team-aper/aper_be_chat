@@ -1,8 +1,7 @@
 package com.sparta.aper_chat_back.global.security.user.respository;
 
-import com.sparta.aper_chat_back.global.security.user.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import com.aperlibrary.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

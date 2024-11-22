@@ -1,5 +1,6 @@
 package com.sparta.aper_chat_back.global.security.user;
 
+import com.aperlibrary.user.entity.User;
 import com.sparta.aper_chat_back.global.security.exception.ServiceException;
 import com.sparta.aper_chat_back.chat.enums.ErrorCode;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;

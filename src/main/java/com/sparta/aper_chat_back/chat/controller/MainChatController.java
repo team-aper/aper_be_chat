@@ -9,7 +9,7 @@ import com.sparta.aper_chat_back.chat.service.ChatService;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
 import com.sparta.aper_chat_back.global.docs.ChatControllerDocs;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
-import com.sparta.aper_chat_back.global.security.user.User;
+
 import com.sparta.aper_chat_back.global.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

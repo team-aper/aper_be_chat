@@ -1,5 +1,6 @@
 package com.sparta.aper_chat_back.global.security.user;
 
+import com.aperlibrary.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

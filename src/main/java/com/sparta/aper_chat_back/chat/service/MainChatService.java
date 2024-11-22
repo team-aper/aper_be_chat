@@ -1,12 +1,14 @@
 package com.sparta.aper_chat_back.chat.service;
 
+import com.aperlibrary.chat.entity.ChatParticipant;
+import com.aperlibrary.chat.entity.ChatRoom;
+import com.aperlibrary.chat.entity.ChatRoomView;
+import com.aperlibrary.user.entity.User;
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.MessageDto;
 import com.sparta.aper_chat_back.chat.dto.SimplifiedChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.entity.ChatMessage;
-import com.sparta.aper_chat_back.chat.entity.ChatParticipant;
-import com.sparta.aper_chat_back.chat.entity.ChatRoom;
-import com.sparta.aper_chat_back.chat.entity.ChatRoomView;
+
 import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
 import com.sparta.aper_chat_back.chat.enums.UserEnum;
 import com.sparta.aper_chat_back.chat.repository.ChatParticipantRepository;
@@ -15,7 +17,6 @@ import com.sparta.aper_chat_back.chat.repository.ChatRoomViewRepository;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
 import com.sparta.aper_chat_back.global.handler.exception.ServiceException;
 import com.sparta.aper_chat_back.chat.enums.ErrorCode;
-import com.sparta.aper_chat_back.global.security.user.User;
 import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
