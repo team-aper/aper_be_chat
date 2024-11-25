@@ -26,11 +26,6 @@ jobs:
       run: |
         mkdir -p ./src/main/resources/yml
         echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
-
-    - name: Create gradle.properties from secret
-      run: |
-        echo "jitpackUsername=${{ secrets.JITPACK_USERNAME }}" > gradle.properties
-        echo "jitpackPassword=${{ secrets.JITPACK_PASSWORD }}" >> gradle.properties
         
     - name: Build with Gradle
       run: ./gradlew build
