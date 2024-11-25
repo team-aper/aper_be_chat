@@ -26,6 +26,12 @@ jobs:
       run: |
         mkdir -p ./src/main/resources/yml
         echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
+
+    - name: Build with Gradle
+      env:
+        JITPACK_USERNAME: ${{ secrets.JITPACK_USERNAME }}
+        JITPACK_PASSWORD: ${{ secrets.JITPACK_PASSWORD }}
+      run: ./gradlew build
         
     - name: Build with Gradle
       run: ./gradlew build
