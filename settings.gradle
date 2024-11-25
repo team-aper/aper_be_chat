@@ -7,7 +7,7 @@ dependencyResolutionManagement {
         maven {
             url 'https://jitpack.io'
             credentials {
-                username =  "jp_n4c9cna9ocmm1q8vnohjom5ok0"
+                username = System.getenv("JITPACK_USERNAME") ?: ""
                 password = ""
             }
         }
