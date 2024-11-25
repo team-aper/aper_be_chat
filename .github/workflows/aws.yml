@@ -18,11 +18,10 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
-
-    - name: Create gradle.properties from secret
+    
+    - name: Create settings.gradle from secret
       run: |
-        echo "jitpackUsername=${{ secrets.JITPACK_USERNAME }}" >> gradle.properties
-        echo "jitpackPassword=${{ secrets.JITPACK_PASSWORD }}" >> gradle.properties
+        echo "${{ secrets.SETTINGS_GRADLE }}" > settings.gradle
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
