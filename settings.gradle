@@ -7,8 +7,8 @@ dependencyResolutionManagement {
         maven {
             url 'https://jitpack.io'
             credentials {
-                username = "jp_n4c9cna9ocmm1q8vnohjom5ok0" // JitPack Personal Access Token
-                password = "" // 비워둡니다.
+                username = gradle.startParameter.projectProperties["jitpackUsername"] ?: ""
+                password = gradle.startParameter.projectProperties["jitpackPassword"] ?: ""
             }
         }
     }
