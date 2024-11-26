@@ -55,7 +55,7 @@ public class MainChatController implements ChatControllerDocs {
     public Mono<ResponseDto<Void>> rejectChatRequest(
             @RequestBody RejectChatRequestDto rejectChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.getChatRoomId(), userDetails.user().getUserId(), rejectChatRequestDto.getMessage());
+        return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.chatRoomId(), userDetails.user().getUserId(), rejectChatRequestDto.message());
     }
 
     @DeleteMapping("/wrap/{chatRoomId}")
