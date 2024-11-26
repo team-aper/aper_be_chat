@@ -226,12 +226,12 @@ public class MainChatService {
         Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(chatRoomId);
 
         if (optionalChatRoom.isEmpty()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND);
         }
         ChatRoom chatRoom = optionalChatRoom.get();
 
         if (!chatRoom.getIsRequested()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.REQUEST_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.REQUEST_NOT_FOUND);
         }
 
         chatRoom.setIsAccepted(Boolean.TRUE);
@@ -244,8 +244,9 @@ public class MainChatService {
 
     private Mono<Void> sendAcceptSystemMessage(Long chatRoomId, Long tutorId) {
         Optional<User> OptionalTutor = userRepository.findById(tutorId);
+
         if (OptionalTutor.isEmpty()) {
-            return Mono.error(new RuntimeException(UserEnum.USER_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
         }
 
         User tutor = OptionalTutor.get();
