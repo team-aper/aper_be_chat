@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.config;
+package com.sparta.aper_chat_back.chat.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

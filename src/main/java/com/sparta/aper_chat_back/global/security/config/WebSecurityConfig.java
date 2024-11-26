@@ -81,7 +81,9 @@ public class WebSecurityConfig {
                         "/swagger",
                         "/health",
                         "/api-docs/**",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
+                        "/ws/**",
+                        "/history"
                 ).permitAll()
                 .anyRequest().authenticated()
         );

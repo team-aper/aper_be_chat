@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.config;
+package com.sparta.aper_chat_back.chat.config;
 
 import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
