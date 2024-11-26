@@ -60,8 +60,7 @@ public class MainChatController implements ChatControllerDocs {
 
     @DeleteMapping("/wrap/{chatRoomId}")
     public Mono<ResponseDto<Void>> terminateChat (
-            @PathVariable Long chatRoomId
-    ) {
+            @PathVariable Long chatRoomId ) {
         return mainChatService.terminateChat(chatRoomId);
     }
 

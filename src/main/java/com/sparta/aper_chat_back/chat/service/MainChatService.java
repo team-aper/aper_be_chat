@@ -264,12 +264,12 @@ public class MainChatService {
     public Mono<ResponseDto<Void>> terminateChat(Long chatRoomId) {
         Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(chatRoomId);
         if (optionalChatRoom.isEmpty()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND);
         }
         ChatRoom chatRoom = optionalChatRoom.get();
 
         if (!chatRoom.getIsAccepted()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.TERMINATE_CHAT_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.TERMINATE_CHAT_NOT_FOUND);
         }
 
         chatRoom.setTerminate(Boolean.FALSE);
