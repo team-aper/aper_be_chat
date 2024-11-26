@@ -166,20 +166,22 @@ public class MainChatService {
         LocalDateTime messageTimeStamp = latestMessage.getTimestamp();
 
         ChatParticipatingResponseDto participatingResponseDto;
-        if (chatParticipant.getLastVisited().isBefore(messageTimeStamp)) {
+
+        if (chatParticipant.getLastVisited() == null || chatParticipant.getLastVisited().isBefore(messageTimeStamp)) {
+            // 읽지 않은 상태로 처리
             participatingResponseDto = new ChatParticipatingResponseDto(
                     roomId,
                     chatParticipant.getIsTutor(),
-                    Boolean.FALSE,
+                    Boolean.FALSE, // 읽지 않음
                     messageContent,
                     messageTimeStamp
             );
-        }
-        else {
+        } else {
+            // 이미 읽은 상태로 처리
             participatingResponseDto = new ChatParticipatingResponseDto(
                     roomId,
                     chatParticipant.getIsTutor(),
-                    Boolean.TRUE,
+                    Boolean.TRUE, // 읽음
                     messageContent,
                     messageTimeStamp
             );
