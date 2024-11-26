@@ -25,10 +25,10 @@ public class ChatMessage {
     public ChatMessage() {}
 
     public ChatMessage(MessageDto messageDto) {
-        this.senderId = messageDto.getId();
-        this.chatRoomId = messageDto.getChatRoomId();
-        this.sysNum = messageDto.getSysNum();
-        this.content = messageDto.getContent();
-        this.timestamp = messageDto.getRegDate();
+        this.senderId = messageDto.id();
+        this.chatRoomId = messageDto.chatRoomId();
+        this.sysNum = messageDto.sysNum();
+        this.content = messageDto.content();
+        this.timestamp = messageDto.regDate();
     }
 }
