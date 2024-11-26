@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.chat.entity;
+package com.sparta.aper_chat_back.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
