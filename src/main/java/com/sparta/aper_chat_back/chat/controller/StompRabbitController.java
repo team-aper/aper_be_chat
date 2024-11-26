@@ -5,6 +5,7 @@ import com.sparta.aper_chat_back.chat.service.ChatService;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cglib.core.Local;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -29,15 +30,26 @@ public class StompRabbitController {
     @MessageMapping("chat.enter.{chatRoomId}")
     public void enter(MessageDto chat, @DestinationVariable Long chatRoomId) {
         String sysMsg = "입장하셨습니다.";
-        chat.setMessage(sysMsg);
-        chat.setRegDate(LocalDateTime.now());
-        template.convertAndSend("amq.topic", "room." + chatRoomId, chat);
+        MessageDto updatedChat = new MessageDto(
+                chat.chatRoomId(),
+                sysMsg,
+                chat.memberId(),
+                chat.sysNum(),
+                LocalDateTime.now()
+        );
+        template.convertAndSend("amq.topic", "room." + chatRoomId, updatedChat);
     }
 
     @MessageMapping("chat.message.{chatRoomId}")
     public void send(MessageDto chat, @DestinationVariable Long chatRoomId) {
-        chat.setRegDate(LocalDateTime.now());
-        chatService.saveMessage(chat)
+        MessageDto updatedChat = new MessageDto(
+                chat.chatRoomId(),
+                chat.content(),
+                chat.memberId(),
+                chat.sysNum(),
+                LocalDateTime.now()
+        );
+        chatService.saveMessage(updatedChat)
                 .doOnSuccess(savedMessage -> {
                     template.convertAndSend("amq.topic", "room." + chatRoomId, chat);
                 })
@@ -46,6 +58,6 @@ public class StompRabbitController {
 
     @RabbitListener(queues = CHAT_QUEUE_NAME)
     public void receive(MessageDto msg) {
-        System.out.println("received : " + msg.getContent());
+        System.out.println("received : " + msg.content());
     }
 }

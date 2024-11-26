@@ -4,30 +4,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import lombok.Getter;
-import org.springframework.jdbc.support.CustomSQLErrorCodesTranslation;
 
 import java.time.LocalDateTime;
 
-@Getter
-public class MessageDto {
-    private Long id;
-    @JsonProperty("chatRoomId")
-    private Long chatRoomId;
-
-    @JsonProperty("senderId")
-    private Long memberId;
-
-    @JsonProperty("content")
-    private String content;
-
-    @JsonProperty("system")
-    private Long sysNum;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime regDate;
-
-
+public record MessageDto(
+        Long id,
+        @JsonProperty("chatRoomId") Long chatRoomId,
+        @JsonProperty("senderId") Long memberId,
+        @JsonProperty("content") String content,
+        @JsonProperty("system") Long sysNum,
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class) LocalDateTime regDate
+) {
     @JsonCreator
     public MessageDto(
             @JsonProperty("chatRoomId") Long chatRoomId,
@@ -35,37 +22,14 @@ public class MessageDto {
             @JsonProperty("content") String content,
             @JsonProperty("regDate") LocalDateTime regDate,
             @JsonProperty("system") Long sysNum) {
-        this.id = 1L;
-        this.chatRoomId = chatRoomId;
-        this.memberId = memberId;
-        this.content = content;
-        this.regDate = regDate;
-        this.sysNum = sysNum;
+        this(1L, chatRoomId, memberId, content, sysNum, regDate);
     }
 
     public MessageDto(Long chatRoomId, String content, Long userId, Long systemId) {
-        this.chatRoomId = chatRoomId;
-        this.memberId = userId;
-        this.sysNum = systemId;
-        this.regDate = LocalDateTime.now();
-        this.content = content;
+        this(1L, chatRoomId, userId, content, systemId, LocalDateTime.now());
     }
 
     public MessageDto(Long chatRoomId, String content, Long userId, Long systemId, LocalDateTime localDateTime) {
-        this.chatRoomId = chatRoomId;
-        this.memberId = userId;
-        this.sysNum = systemId;
-        this.regDate = localDateTime;
-        this.content = content;
+        this(1L, chatRoomId, userId, content, systemId, localDateTime);
     }
-
-
-    public void setRegDate(LocalDateTime now) {
-        this.regDate = LocalDateTime.now();
-    }
-
-    public void setMessage(String sysMsg) {
-        this.content = sysMsg;
-    }
-
 }
