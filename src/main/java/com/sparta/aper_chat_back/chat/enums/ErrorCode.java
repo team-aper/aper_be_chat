@@ -75,6 +75,13 @@ public enum ErrorCode {
     CHAT_ROOM_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "CH005", "해당 채팅방 형성 요청이 없습니다."),
     CHAT_ROOM_REQUEST_ACCEPTED(HttpStatus.BAD_REQUEST, "CH006", "이미 요청을 수락하셨습니다."),
     CHAT_ROOM_REQUEST_REJECTED(HttpStatus.BAD_REQUEST, "CH007", "이미 요청을 거절하셨습니다."),
+    ALREADY_ACCEPTED(HttpStatus.BAD_REQUEST, "CH008","이미 요청을 수락하셨습니다."),
+    ALREADY_REJECTED(HttpStatus.BAD_REQUEST, "CH009", "이미 요청을 거절하셨습니다."),
+    ALREADY_CREATED(HttpStatus.BAD_REQUEST, "CH010", "이미 생성된 채팅방 입니다."),
+    CHAT_REQUEST_MISSING(HttpStatus.NOT_FOUND, "CH011","해당 채팅방 형성 요청이 없습니다."),
+    REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND,  "CH012", "튜터 신청 요청을 찾을 수 없습니다."),
+    TERMINATE_CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "CH013","종료할 대화를 찾을 수 없습니다."),
+    ALREADY_ACCEPTED_CHATROOM(HttpStatus.NOT_FOUND, "CH014", "이미 요청이 수락된 채팅방 입니다."),
 
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
