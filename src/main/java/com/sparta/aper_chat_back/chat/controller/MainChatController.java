@@ -33,9 +33,9 @@ public class MainChatController implements ChatControllerDocs {
             @RequestBody CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        Long tutorId = createChatRequestDto.getTutorId();
+        Long tutorId = createChatRequestDto.tutorId();
 
-        return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
+        return mainChatService.createChat(userId, tutorId, createChatRequestDto.message());
     }
 
     @GetMapping("/{chatRoomId}")
