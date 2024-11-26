@@ -4,16 +4,13 @@ import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
 import com.sparta.aper_chat_back.chat.dto.RejectChatRequestDto;
 import com.sparta.aper_chat_back.chat.dto.SimplifiedChatParticipatingResponseDto;
-import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
-import com.sparta.aper_chat_back.chat.service.ChatService;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
-import com.sparta.aper_chat_back.global.docs.ChatControllerDocs;
+import com.sparta.aper_chat_back.chat.docs.MainChatControllerDocs;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
 
 import com.sparta.aper_chat_back.global.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.DialectOverride;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -25,7 +22,7 @@ import java.util.List;
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 @Slf4j
-public class MainChatController implements ChatControllerDocs {
+public class MainChatController implements MainChatControllerDocs {
 
     private final MainChatService mainChatService;
 

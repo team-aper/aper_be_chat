@@ -1,4 +1,4 @@
-package com.sparta.aper_chat_back.global.docs;
+package com.sparta.aper_chat_back.chat.docs;
 
 import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
@@ -15,13 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@Tag(name = "chat-controller", description = "튜터와 채팅방 생성 및 관리 API")
-public interface ChatControllerDocs {
+@Tag(name = "main-chat-controller", description = "튜터와 채팅방 생성 및 관리 API")
+public interface MainChatControllerDocs {
 
     @Operation(summary = "채팅방 생성", description = "튜터와 새로운 채팅방을 생성합니다.")
     @ApiResponses({
@@ -112,4 +111,5 @@ public interface ChatControllerDocs {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<List<SimplifiedChatParticipatingResponseDto>> getSimplifiedParticipatingChats(@AuthenticationPrincipal UserDetailsImpl userDetails);
+
 }
