@@ -112,32 +112,6 @@ public class MainChatService {
         return participatingChatList.get(0).getChatRoomId();
     }
 
-//    @Transactional // maybe to be deleted
-//    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
-//        List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
-//
-//        if (participatingChats.isEmpty()) {
-//            return ResponseDto.fail(ChatMessageEnum.NO_PARTICIPATING_CHAT.getMessage());
-//        }
-//
-//        List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
-//        for (ChatParticipant chatParticipant : participatingChats) {
-//            ChatRoom chatRoom = chatParticipant.getChatRoom();
-//            if (chatRoom.getIsAccepted()) {
-//                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
-//                        chatRoom.getId(),
-//                        chatParticipant.getIsTutor(),
-//                        chatRoom.getIsAccepted(),
-//                        chatRoom.getStartTime(),
-//                        Boolean.FALSE
-//                );
-//                participatingResponseDtos.add(participatingResponseDto);
-//            }
-//        }
-//
-//        return ResponseDto.success(ChatMessageEnum.FIND_CHAT_SUCCESS.getMessage(), participatingResponseDtos);
-//    }
-
     public ResponseDto<List<ChatParticipatingResponseDto>> checkReadStatus(Long userId) {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
