@@ -33,19 +33,11 @@ public class MainChatController implements ChatControllerDocs {
             @RequestBody CreateChatRequestDto createChatRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        //Long userId = 4L;
         Long tutorId = createChatRequestDto.getTutorId();
 
-        return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage());
+        return mainChatService.createChat(userId, tutorId, createChatRequestDto.getMessage())
+                .then(Mono.just(ResponseDto.success("성공적으로 튜터링 요청을 보냈습니다.")));
     }
-
-    //maybe to be deleted
-//    @GetMapping
-//    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return mainChatService.getParticipatingChats(userDetails.user().getUserId());
-//        //return mainChatService.getParticipatingChats(4L);
-//    }
 
     @GetMapping("/{chatRoomId}")
     public Mono<ResponseDto<Void>> acceptChatRequest(@PathVariable Long chatRoomId,
