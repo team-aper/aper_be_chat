@@ -24,7 +24,6 @@ public class HealthCheckController {
 
     @PutMapping("/heartbeat/{chatRoomId}")
     public void heartbeat(@PathVariable Long chatRoomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        //mainChatService.heartbeat(chatRoomId, userDetails.user().getUserId());
-        mainChatService.heartbeat(chatRoomId, 3L);
+        mainChatService.heartbeat(chatRoomId, userDetails.user().getUserId());
     }
 }
