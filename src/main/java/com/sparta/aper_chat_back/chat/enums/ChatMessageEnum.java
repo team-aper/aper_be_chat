@@ -17,7 +17,8 @@ public enum ChatMessageEnum {
     TERMINATE_CHAT_NOT_FOUND("종료할 대화를 찾을 수 없습니다."),
     CHAT_TERMINATED("채팅을 종료하였습니다."),
     SYSTEM_TERMINATE("수업이 종료되었습니다."),
-    ALREADY_ACCEPTED_CHATROOM("이미 요청이 수락된 채팅방 입니다.");
+    ALREADY_ACCEPTED_CHATROOM("이미 요청이 수락된 채팅방 입니다."),
+    CHAT_ROOMS_FOUND("성공적으로 채팅방을 찾았습니다");
 
     private final String message;
 

@@ -4,6 +4,7 @@ import com.sparta.aper_chat_back.chat.dto.ChatParticipatingResponseDto;
 import com.sparta.aper_chat_back.chat.dto.CreateChatRequestDto;
 import com.sparta.aper_chat_back.chat.dto.RejectChatRequestDto;
 import com.sparta.aper_chat_back.chat.dto.SimplifiedChatParticipatingResponseDto;
+import com.sparta.aper_chat_back.chat.enums.ChatMessageEnum;
 import com.sparta.aper_chat_back.chat.service.MainChatService;
 import com.sparta.aper_chat_back.chat.docs.MainChatControllerDocs;
 import com.sparta.aper_chat_back.global.dto.ResponseDto;
@@ -71,7 +72,7 @@ public class MainChatController implements MainChatControllerDocs {
     public ResponseDto<List<SimplifiedChatParticipatingResponseDto>> getSimplifiedParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<SimplifiedChatParticipatingResponseDto> response = mainChatService.getSimplifiedParticipatingChats(userDetails.user().getUserId());
-        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", response);
+        return ResponseDto.success(ChatMessageEnum.CHAT_ROOMS_FOUND.getMessage(), response);
     }
 
 }
