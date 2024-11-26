@@ -13,6 +13,7 @@ import com.sparta.aper_chat_back.global.dto.ResponseDto;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DialectOverride;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -28,6 +29,7 @@ public class MainChatController implements ChatControllerDocs {
 
     private final MainChatService mainChatService;
 
+    @Override
     @PostMapping
     public Mono<ResponseDto<Void>> createChat(
             @RequestBody CreateChatRequestDto createChatRequestDto,
@@ -38,6 +40,7 @@ public class MainChatController implements ChatControllerDocs {
         return mainChatService.createChat(userId, tutorId, createChatRequestDto.message());
     }
 
+    @Override
     @GetMapping("/{chatRoomId}")
     public Mono<ResponseDto<Void>> acceptChatRequest(@PathVariable Long chatRoomId,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -45,12 +48,13 @@ public class MainChatController implements ChatControllerDocs {
 
     }
 
+    @Override
     @GetMapping("/status/chatRoom")
     public ResponseDto<List<ChatParticipatingResponseDto>> checkReadStatus(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainChatService.checkReadStatus(userDetails.user().getUserId());
     }
 
-
+    @Override
     @DeleteMapping("/status")
     public Mono<ResponseDto<Void>> rejectChatRequest(
             @RequestBody RejectChatRequestDto rejectChatRequestDto,
@@ -58,12 +62,14 @@ public class MainChatController implements ChatControllerDocs {
         return mainChatService.rejectChatRoomRequest(rejectChatRequestDto.chatRoomId(), userDetails.user().getUserId(), rejectChatRequestDto.message());
     }
 
+    @Override
     @DeleteMapping("/wrap/{chatRoomId}")
     public Mono<ResponseDto<Void>> terminateChat (
             @PathVariable Long chatRoomId ) {
         return mainChatService.terminateChat(chatRoomId);
     }
 
+    @Override
     @GetMapping
     public ResponseDto<List<SimplifiedChatParticipatingResponseDto>> getSimplifiedParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
