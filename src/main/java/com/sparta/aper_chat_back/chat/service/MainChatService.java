@@ -169,16 +169,13 @@ public class MainChatService {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.CHAT_REQUEST_MISSING.getMessage()));
+            throw new ServiceException(ErrorCode.CHAT_REQUEST_MISSING);
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (!chatRoom.getIsRequested()) {
-            return Mono.just(ResponseDto.fail(ChatMessageEnum.REQUEST_NOT_FOUND.getMessage()));
+            throw new ServiceException(ErrorCode.REQUEST_NOT_FOUND);
         }
-//        if (!chatRoom.getIsAccepted()) {
-//            return Mono.just(ResponseDto.fail(ChatMessageEnum.ALREADY_REJECTED.getMessage()));
-//        }
 
         chatRoom.reject();
         chatRoom.setIsRequested(Boolean.FALSE);
