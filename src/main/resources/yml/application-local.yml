@@ -34,3 +34,16 @@ secret:
   key:
     access: ${jwt.secret.key.access}
     refresh: ${jwt.secret.key.refresh}
+
+springdoc:
+  swagger-ui:
+    path: ${local.swagger.path}
+
+  api-docs:
+    path: ${local.swagger.api-docs}
+
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+  paths-to-match:
+    - ${local.swagger.match}

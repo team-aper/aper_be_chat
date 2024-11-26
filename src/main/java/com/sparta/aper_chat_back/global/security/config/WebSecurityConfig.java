@@ -76,6 +76,15 @@ public class WebSecurityConfig {
         // 시큐리티 CORS 설정
         http.cors(cors -> cors.configurationSource(configurationSource()));
 
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(
+                        "/swagger",
+                        "/health",
+                        "/api-docs/**",
+                        "/swagger-ui/**"
+                ).permitAll()
+                .anyRequest().authenticated()
+        );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
