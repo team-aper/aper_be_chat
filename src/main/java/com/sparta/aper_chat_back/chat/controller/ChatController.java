@@ -20,11 +20,9 @@ import reactor.core.publisher.Sinks;
 public class ChatController {
 
     private final ChatService chatService;
-    private final Sinks.Many<ChatMessage> sink;
 
     public ChatController(ChatService chatService) {
         this.chatService = chatService;
-        this.sink = Sinks.many().multicast().onBackpressureBuffer();
     }
 
     @GetMapping("/history")

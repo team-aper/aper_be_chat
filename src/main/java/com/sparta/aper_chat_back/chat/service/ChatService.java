@@ -16,11 +16,10 @@ import org.springframework.data.mongodb.core.query.Query;
 public class ChatService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;
-    private final SimpMessagingTemplate messagingTemplate;
+
 
     public ChatService(ReactiveMongoTemplate reactiveMongoTemplate, SimpMessagingTemplate messagingTemplate) {
         this.reactiveMongoTemplate = reactiveMongoTemplate;
-        this.messagingTemplate = messagingTemplate;
     }
 
 
