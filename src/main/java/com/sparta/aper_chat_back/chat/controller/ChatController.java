@@ -27,13 +27,6 @@ public class ChatController {
         this.sink = Sinks.many().multicast().onBackpressureBuffer();
     }
 
-//    @MessageMapping("/chat")
-//    public Mono<Void> saveMessage(@Payload MessageRequestDto requestDto) {
-//        return chatService.saveAndBroadcastMessage(requestDto)
-//                .doOnSuccess(sink::tryEmitNext)
-//                .then();
-//    }
-
     @GetMapping("/history")
     @Operation(summary = "과거 채팅 불러오기", description = "chatRoomId에 해당하는 채팅방 기록을 불러옴")
     public Flux<ChatMessage> getChatHistory(@RequestParam Long chatRoomId) {
