@@ -48,7 +48,6 @@ public class MainChatController implements ChatControllerDocs {
     @GetMapping("/status/chatRoom")
     public ResponseDto<List<ChatParticipatingResponseDto>> checkReadStatus(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainChatService.checkReadStatus(userDetails.user().getUserId());
-        //return mainChatService.checkReadStatus(1L);
     }
 
 

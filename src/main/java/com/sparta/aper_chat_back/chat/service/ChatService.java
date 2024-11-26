@@ -46,11 +46,4 @@ public class ChatService {
         return reactiveMongoTemplate.findOne(query, ChatMessage.class, collectionName);
     }
 
-//    @Transactional
-//    public Mono<ChatMessage> saveAndBroadcastMessage(MessageRequestDto requestDto) {
-//        return saveMessage(requestDto)
-//                .doOnSuccess(savedMessage -> {
-//                    messagingTemplate.convertAndSend("/subscribe/" + requestDto.getChatRoomId(), savedMessage);
-//                });
-//    }
 }

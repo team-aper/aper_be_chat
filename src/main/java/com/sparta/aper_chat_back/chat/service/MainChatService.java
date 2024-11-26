@@ -117,7 +117,7 @@ public class MainChatService {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
         if (participatingChats.isEmpty()) {
-            return ResponseDto.fail(ChatMessageEnum.NO_PARTICIPATING_CHAT.getMessage());
+            throw new ServiceException(ErrorCode.NO_PARTICIPATING_CHAT);
         }
 
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
