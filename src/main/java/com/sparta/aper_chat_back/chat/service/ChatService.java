@@ -24,7 +24,7 @@ public class ChatService {
 
 
     public Mono<ChatMessage> saveMessage(MessageDto messageDto) {
-        String collectionName = "chat_" + messageDto.getChatRoomId();
+        String collectionName = "chat_" + messageDto.chatRoomId();
         ChatMessage chatMessage = new ChatMessage(messageDto);
         return reactiveMongoTemplate.save(chatMessage, collectionName);
     }
