@@ -54,8 +54,8 @@ public class MainChatService {
 
                     if (isCreated) {
                         Long chatRoomId = createdChatRoomId(userId, tutorId);
-                        chatRoom = chatRoomRepository.findById(chatRoomId)
-                                .orElseThrow(() -> new RuntimeException(ChatMessageEnum.CHAT_NOT_FOUND.getMessage()));
+                        chatRoom = chatRoomRepository.findById(chatRoomId).get();
+
                     } else {
                         // 새로운 채팅방 생성
                         chatRoom = new ChatRoom();
@@ -69,7 +69,7 @@ public class MainChatService {
                     }
 
                     if (Boolean.TRUE.equals(chatRoom.getIsAccepted())) {
-                        return Mono.just(ResponseDto.success(ChatMessageEnum.ALREADY_ACCEPTED_CHATROOM.getMessage()));
+                        return Mono.error(new ServiceException(ErrorCode.ALREADY_ACCEPTED_CHATROOM));
                     }
                     chatRoom.setIsRequested(Boolean.TRUE);
                     chatRoomRepository.save(chatRoom);
@@ -109,6 +109,7 @@ public class MainChatService {
         String tag = tutorId + "-" + userId;
         viewRepository.updateChatRoomParticipantsView();
         List<ChatRoomView> participatingChatList = viewRepository.findByParticipants(tag);
+
         return participatingChatList.get(0).getChatRoomId();
     }
 
