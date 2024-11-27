@@ -8,11 +8,3 @@ spring:
       - classpath:/yml/application-dev.yml
   profiles:
     active: local
-
-logging:
-  level:
-    org:
-      springframework:
-        messaging:
-          simp:
-            stomp: DEBUG

@@ -5,6 +5,9 @@ spring:
     activate:
       on-profile: dev
 
+  main:
+    banner-mode: off
+
   rabbitmq:
     host: ${dev.rabbitmq.host}
     port: ${dev.rabbitmq.port}
@@ -23,7 +26,6 @@ spring:
       hibernate:
         dialect: ${dev.mysql.dialect}
 
-
 springdoc:
   swagger-ui:
     path: ${dev.swagger.path}
@@ -39,8 +41,6 @@ springdoc:
 
 mongodb:
   uri: ${dev.mongodb.uri}
-
-
 
 secret:
   key:

@@ -47,3 +47,12 @@ springdoc:
 
   paths-to-match:
     - ${local.swagger.match}
+
+
+logging:
+  level:
+    org:
+      springframework:
+        messaging:
+          simp:
+            stomp: DEBUG
