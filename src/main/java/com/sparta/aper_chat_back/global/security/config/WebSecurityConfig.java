@@ -1,5 +1,7 @@
 package com.sparta.aper_chat_back.global.security.config;
 
+import com.sparta.aper_chat_back.global.security.authHandler.CustomAccessDeniedHandler;
+import com.sparta.aper_chat_back.global.security.authHandler.CustomAuthenticationEntryPoint;
 import com.sparta.aper_chat_back.global.security.filter.JwtAuthorizationFilter;
 import com.sparta.aper_chat_back.global.security.jwt.TokenProvider;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsServiceImpl;
@@ -30,11 +32,15 @@ public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
-    public final UserRepository userRepository;
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, UserRepository userRepository) {
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+
+    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, CustomAccessDeniedHandler customAccessDeniedHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
-        this.userRepository = userRepository;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     public CorsConfigurationSource configurationSource() {
@@ -76,7 +82,8 @@ public class WebSecurityConfig {
         // 시큐리티 CORS 설정
         http.cors(cors -> cors.configurationSource(configurationSource()));
 
-//        http.authorizeHttpRequests(authorize -> authorize
+        http.authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated()
 //                .requestMatchers(
 //                        "/swagger",
 //                        "/health",
@@ -85,11 +92,19 @@ public class WebSecurityConfig {
 //                        "/ws/**",
 //                        "/history"
 //                ).permitAll()
-//        );
+        );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin(AbstractHttpConfigurer::disable);
+        http.logout(AbstractHttpConfigurer::disable);
+
+        // 예외 처리 설정
+        http.exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증 실패 처리
+                        .accessDeniedHandler(customAccessDeniedHandler) // 인가 실패 처리
+        );
 
 
         return http.build();
