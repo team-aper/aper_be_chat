@@ -55,20 +55,20 @@ jobs:
 
       - name: Delete non-latest images from ECR
         run: |
-          echo "Fetching non-latest image tags from ECR..."
-          IMAGE_TAGS=$(aws ecr describe-images \
+          echo "Fetching non-latest images (null tags and non-latest) from ECR..."
+          IMAGES=$(aws ecr describe-images \
             --repository-name chat-repository \
-            --query "imageDetails[?!(contains(imageTags, 'latest'))].imageTags[]" \
+            --query "imageDetails[?imageTags==null || !contains(imageTags, 'latest')].[imageDigest]" \
             --output text)
 
-          if [ -z "$IMAGE_TAGS" ]; then
-            echo "No non-latest images found. Skipping deletion."
+          if [ -z "$IMAGES" ]; then
+            echo "No images to delete. Skipping."
           else
-            for TAG in $IMAGE_TAGS; do
-              echo "Deleting image with tag: $TAG"
+            for DIGEST in $IMAGES; do
+              echo "Deleting image with digest: $DIGEST"
               aws ecr batch-delete-image \
                 --repository-name chat-repository \
-                --image-ids imageTag=$TAG || echo "Failed to delete image with tag: $TAG"
+                --image-ids imageDigest=$DIGEST || echo "Failed to delete image with digest: $DIGEST"
             done
           fi
 
