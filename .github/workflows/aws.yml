@@ -53,6 +53,25 @@ jobs:
       - name: Push Docker image to ECR
         run: docker push ${{ secrets.ECR_URI }}:latest
 
+      - name: Delete non-latest images from ECR
+        run: |
+          echo "Fetching non-latest image tags from ECR..."
+          IMAGE_TAGS=$(aws ecr describe-images \
+            --repository-name chat-repository \
+            --query "imageDetails[?!(contains(imageTags, 'latest'))].imageTags[]" \
+            --output text)
+
+          if [ -z "$IMAGE_TAGS" ]; then
+            echo "No non-latest images found. Skipping deletion."
+          else
+            for TAG in $IMAGE_TAGS; do
+              echo "Deleting image with tag: $TAG"
+              aws ecr batch-delete-image \
+                --repository-name chat-repository \
+                --image-ids imageTag=$TAG || echo "Failed to delete image with tag: $TAG"
+            done
+          fi
+
       - name: Deploy using Docker Compose
         uses: appleboy/ssh-action@v0.1.6
         with:
