@@ -83,15 +83,18 @@ public class WebSecurityConfig {
         http.cors(cors -> cors.configurationSource(configurationSource()));
 
         http.authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
-//                .requestMatchers(
-//                        "/swagger",
-//                        "/health",
+                .requestMatchers(
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/api-docs/**",
+                "/v3/api-docs/**"
+//                       , "/health",
 //                        "/api-docs/**",
 //                        "/swagger-ui/**",
 //                        "/ws/**",
 //                        "/history"
-//                ).permitAll()
+                ).permitAll()
+                        .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
