@@ -5,8 +5,6 @@ import com.sparta.aper_chat_back.global.security.authHandler.CustomAuthenticatio
 import com.sparta.aper_chat_back.global.security.filter.JwtAuthorizationFilter;
 import com.sparta.aper_chat_back.global.security.jwt.TokenProvider;
 import com.sparta.aper_chat_back.global.security.user.UserDetailsServiceImpl;
-import com.sparta.aper_chat_back.global.security.user.respository.UserRepository;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
